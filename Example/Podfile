@@ -1,0 +1,10 @@
+target 'ASMScaleKit', :exclusive => true do
+  pod "ASMScaleKit", :path => "../"
+end
+
+target 'Tests', :exclusive => true do
+  pod "ASMScaleKit", :path => "../"
+
+  pod 'Specta', '~> 0.2.1'
+  pod 'Expecta'
+end
