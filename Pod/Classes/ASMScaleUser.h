@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 
 /**
- *	Base class to represent a user from an ASMScaleServiceProvider.
+ *	Represents an individual (user) of a particular service.
  */
-@interface ASMScaleUser : NSObject
+@protocol ASMScaleUser <NSSecureCoding>
 
 /**
  *	A string representing this user appropriate for displaying in a user interface.
