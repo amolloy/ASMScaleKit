@@ -13,6 +13,11 @@
 @protocol ASMScaleServiceProvider <NSObject>
 
 /**
+ *	Log the account out of the service provider (if appropriate).
+ */
+- (void)logout;
+
+/**
  *	Completion handler for authenticating a scale service provider.
  *
  *	@param users If authentication succeeded, contains a list of available ASMScaleUsers for this service.
@@ -24,11 +29,14 @@ typedef void(^ASMScaleServiceProviderAuthenticationHandler)(NSArray* users, NSEr
  *	Authenticates against the scale service provider. If appropriate, this also retrieves a list of users
  *	available for the logged in account.
  *
+ *	@param viewController If the service provider needs to present a UI to perform authentication, it 
+ *	will be presented through viewController.
  *	@param completion Called upon completion of the authentication request. If authentication failed,
  *	an error will be provided in error. If the service provider has a concept of users, then a list
  *	of the available users will be provided in users.
  */
-- (void)authenticateWithCompletion:(ASMScaleServiceProviderAuthenticationHandler)completion;
+- (void)authenticateFromViewController:(UIViewController*)viewController
+						withCompletion:(ASMScaleServiceProviderAuthenticationHandler)completion;
 
 /**
  *	Completion handler for retrieving the latest entries for a user from a service provider.
