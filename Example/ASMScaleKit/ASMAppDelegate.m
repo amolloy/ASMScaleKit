@@ -7,6 +7,7 @@
 //
 
 #import "ASMAppDelegate.h"
+#import <AFOAuth1Client~wouterds/AFOAuth1Client.h>
 
 @implementation ASMAppDelegate
 
@@ -15,7 +16,20 @@
     // Override point for customization after application launch.
     return YES;
 }
-							
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation
+{
+    NSNotification* notification = [NSNotification notificationWithName:kAFApplicationLaunchedWithURLNotification
+																 object:nil
+															   userInfo:@{kAFApplicationLaunchOptionsURLKey: url}];
+    [[NSNotificationCenter defaultCenter] postNotification:notification];
+
+    return YES;
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
