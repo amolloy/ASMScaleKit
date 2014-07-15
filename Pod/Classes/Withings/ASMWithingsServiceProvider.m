@@ -91,10 +91,10 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 	[self.client authorizeWithRequestTokenPath:@"account/request_token"
 						userAuthenticationPath:@"account/authorize"
 							   accessTokenPath:@"account/access_token"
-								   callbackURL:[NSURL URLWithString:@"x-com-asmscalekit://success"]
 										 scope:nil //@"read"?
 								  accessMethod:ASMOAUTH1ClientAccessGETMethod
 					  requestParameterLocation:ASMOAuth1ClientRequestParameterURLQueryLocation
+							fromViewController:viewController
 									completion:^(ASMOAuth1Token* accessToken, NSError *error)
 	 {
 		 __strong typeof(wself) self = wself;
