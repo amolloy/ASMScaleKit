@@ -37,7 +37,6 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 }
 
 @interface ASMOAuth1Client ()
-@property (nonatomic, strong) NSURL* baseURL;
 @property (nonatomic, copy) NSString* consumerKey;
 @property (nonatomic, copy) NSString* consumerSecret;
 @property (nonatomic, strong, readwrite) ASMOAuth1Token* accessToken;
@@ -217,12 +216,10 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 		NSURLComponents* components = [NSURLComponents componentsWithURL:[self.baseURL URLByAppendingPathComponent:path]
 												 resolvingAgainstBaseURL:NO];
 
-		NSString* oauthTokenParam = [NSString stringWithFormat:@"oauth_token=%@",
-									 [requestToken.key stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()]];
 		NSString* oauthVerifierParam = [NSString stringWithFormat:@"oauth_verifier=%@",
 										[requestToken.verifier stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()]];
 
-		components.percentEncodedQuery = [NSString stringWithFormat:@"%@&%@", oauthTokenParam, oauthVerifierParam];
+		components.percentEncodedQuery = oauthVerifierParam;
 
 		NSMutableURLRequest* mutableRequest = [NSMutableURLRequest requestWithURL:components.URL];
 		[mutableRequest setHTTPMethod:[NSString stringWithOAuth1ClientAccessMethod:accessMethod]];
@@ -350,16 +347,42 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 			[oauthParameters addObject:[NSString stringWithFormat:@"oauth_callback=%@",
 										[[callbackURL absoluteString] stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()]]];
 		}
+		if (self.accessToken)
+		{
+			[oauthParameters addObject:[NSString stringWithFormat:@"oauth_token=%@",
+										[self.accessToken.key stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()]]];
+		}
 		NSURLComponents* urlComponents = [NSURLComponents componentsWithURL:request.URL
 													resolvingAgainstBaseURL:NO];
+		__block NSArray* originalParameters = nil;
 		NSString* query = [urlComponents percentEncodedQuery];
 		if (query.length != 0)
 		{
-			[oauthParameters addObjectsFromArray:[query componentsSeparatedByString:@"&"]];
+			NSArray* queryParameters = [query componentsSeparatedByString:@"&"];
+			[queryParameters enumerateObjectsUsingBlock:^(NSString* param, NSUInteger idx, BOOL *stop) {
+				if ((self.providerHints & ASMAuth1ClientProviderTailOAuthParameters) && [param hasPrefix:@"oauth_"])
+				{
+					[oauthParameters addObject:param];
+				}
+				else
+				{
+					if (!originalParameters)
+					{
+						originalParameters = @[];
+					}
+					originalParameters = [originalParameters arrayByAddingObject:param];
+				}
+			}];
+		}
+
+		NSArray* signatureParameters = oauthParameters;
+		if (originalParameters)
+		{
+			signatureParameters = [signatureParameters arrayByAddingObjectsFromArray:originalParameters];
 		}
 
 		NSString* signature = [self oauthSignatureForURLRequest:newRequest
-												queryParameters:oauthParameters
+												queryParameters:signatureParameters
 											 postBodyParameters:nil
 														  token:self.accessToken];
 
@@ -368,7 +391,15 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 
 		[oauthParameters sortUsingSelector:@selector(compare:)];
 
-		urlComponents.percentEncodedQuery = [oauthParameters componentsJoinedByString:@"&"];
+		NSString* newQuery = @"";
+		if (originalParameters)
+		{
+			newQuery = [originalParameters componentsJoinedByString:@"&"];
+			newQuery = [newQuery stringByAppendingString:@"&"];
+		}
+		newQuery = [newQuery stringByAppendingString:[oauthParameters componentsJoinedByString:@"&"]];
+
+		urlComponents.percentEncodedQuery = newQuery;
 		newRequest.URL = urlComponents.URL;
 	}
 	else if (ASMOAuth1ClientRequestParameterAuthorizationHeaderLocation == requestParameterLocation)
@@ -452,7 +483,32 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 		queryParameters = @[];
 	}
 	NSArray* allParameters = [queryParameters arrayByAddingObjectsFromArray:postBodyParameters];
-	allParameters = [allParameters sortedArrayUsingSelector:@selector(compare:)];
+
+	if (self.providerHints & ASMAuth1ClientProviderTailOAuthParameters)
+	{
+		NSMutableArray* nonOAuthParameters = [NSMutableArray array];
+		NSMutableArray* oauthParameters = [NSMutableArray array];
+
+		[allParameters enumerateObjectsUsingBlock:^(NSString* kvPair, NSUInteger idx, BOOL *stop) {
+			if ([kvPair hasPrefix:@"oauth_"])
+			{
+				[oauthParameters addObject:kvPair];
+			}
+			else
+			{
+				[nonOAuthParameters addObject:kvPair];
+			}
+		}];
+
+		[oauthParameters sortUsingSelector:@selector(compare:)];
+		[nonOAuthParameters addObjectsFromArray:oauthParameters];
+
+		allParameters = nonOAuthParameters.copy;
+	}
+	else
+	{
+		allParameters = [allParameters sortedArrayUsingSelector:@selector(compare:)];
+	}
 
 	NSString* normalizedRequestParameters = [allParameters componentsJoinedByString:@"&"];
 	normalizedRequestParameters = [normalizedRequestParameters stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()];

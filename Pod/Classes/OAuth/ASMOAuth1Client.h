@@ -31,8 +31,22 @@ typedef NS_ENUM(NSInteger, ASMOAuth1ClientSignatureMethod)
 	ASMOAuth1ClientHMACSHA1SignatureMethod,
 };
 
+typedef NS_OPTIONS(NSInteger, ASMAuth1ClientProviderHints)
+{
+	ASMAuth1ClientProviderNoHints = 0,
+	/**
+	 *	OAuth parameters always follow custom parameters, even when calculating the signature. 
+	 *	OAuth spec requires OAuth parameters and custom parameters to be interleaved, sorted by
+	 *	name, when calculating the signature. Withings, however, requires all custom parameters
+	 *	to appear before the OAuth parameters, including during signature calculation.
+	 */
+	ASMAuth1ClientProviderTailOAuthParameters = 1 << 0,
+};
+
 @interface ASMOAuth1Client : NSObject
 
+@property (nonatomic, assign) ASMAuth1ClientProviderHints providerHints;
+@property (nonatomic, strong) NSURL* baseURL;
 @property (nonatomic, assign) ASMOAuth1ClientSignatureMethod signatureMethod;
 @property (nonatomic, copy) NSString* realm;
 @property (nonatomic, strong, readonly) ASMOAuth1Token* accessToken;
@@ -53,11 +67,6 @@ typedef void(^ASMOauth1ClientAuthorizeCompletion)(ASMOAuth1Token* token, NSError
 #endif
 						   completion:(ASMOauth1ClientAuthorizeCompletion)completion;
 
-
-// TODO This does not need to be public.
-- (NSString*)HMACSHA1SignatureForURLRequest:(NSURLRequest*)request
-							queryParameters:(NSArray*)queryParameters
-						 postBodyParameters:(NSArray*)postBodyParameters
-									  token:(ASMOAuth1Token*)token;
-
+- (NSURLRequest*)requestWithOAuthParametersFromURLRequest:(NSURLRequest*)request
+								 requestParameterLocation:(ASMOAuth1ClientRequestParameterLocation)requestParameterLocation;
 @end
