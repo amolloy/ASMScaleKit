@@ -36,6 +36,7 @@ typedef NS_OPTIONS(NSInteger, ASMOAuth1ClientProviderHint)
 	ASMOAuth1ClientProviderNoHint = 0,
 	ASMOAuth1ClientProviderIncludeUserInfoInAccessRequestHint = 1 << 0,
 	ASMOAuth1ClientProviderSuppressVerifierHint = 1 << 1,
+	ASMOAuth1ClientIncludeFullOAuthParametersInAuthenticationHint = 1 << 2
 };
 
 @interface ASMOAuth1Client : NSObject

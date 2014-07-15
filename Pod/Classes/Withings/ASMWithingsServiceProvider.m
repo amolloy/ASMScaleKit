@@ -61,9 +61,20 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 		NSURLRequest* request = [NSURLRequest requestWithURL:components.URL];
 		request = [self.client requestWithOAuthParametersFromURLRequest:request];
 
+		NSLog(@"Request User Info");
+		NSLog(@"-----------------");
+		NSLog(@"%@", request);
+
 		NSURLSession* session = [NSURLSession sharedSession];
 		[[session dataTaskWithRequest:request
 					completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+
+						NSLog(@"--------");
+						NSLog(@"Response");
+						NSLog(@"--------");
+						NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+						NSLog(@"");
+
 						if (error)
 						{
 							NSLog(@"Error getting user info: %@", error);
@@ -100,7 +111,7 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 													   key:self.oauthKey
 													secret:self.oauthSecret];
 	self.client.protocolParameterLocation = ASMOAuth1ProtocolParameterURLQueryLocation;
-	self.client.providerHints = ASMOAuth1ClientProviderIncludeUserInfoInAccessRequestHint | ASMOAuth1ClientProviderSuppressVerifierHint;
+	self.client.providerHints = ASMOAuth1ClientProviderIncludeUserInfoInAccessRequestHint | ASMOAuth1ClientProviderSuppressVerifierHint | ASMOAuth1ClientIncludeFullOAuthParametersInAuthenticationHint;
 
 	__weak typeof(self) wself = self;
 
