@@ -7,15 +7,15 @@
 //
 
 #import "ASMWithingsServiceProvider.h"
-#import <AFOAuth1Client~wouterds/AFOAuth1Client.h>
-#import <AFNetworking/AFNetworking.h>
+#import "ASMOAuth1Client.h"
+#import "ASMOAuth1Token.h"
 
 @interface ASMWithingsServiceProvider ()
 @property (nonatomic, copy) NSString* oauthKey;
 @property (nonatomic, copy) NSString* oauthSecret;
 @property (nonatomic, copy) ASMScaleServiceProviderAuthenticationHandler authenticationCompletionHandler;
-@property (nonatomic, strong) AFOAuth1Token* accessToken;
-@property (nonatomic, strong) AFOAuth1Client* client;
+@property (nonatomic, strong) ASMOAuth1Token* accessToken;
+@property (nonatomic, strong) ASMOAuth1Client* client;
 @end
 
 @implementation ASMWithingsServiceProvider
@@ -42,35 +42,37 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 
 - (void)lookupUserInformation
 {
-	NSDictionary* userInfo = self.accessToken.userInfo;
-	NSString* userId = userInfo[@"userid"];
-	if (userId)
-	{
-		NSLog(@"User: %@", userId);
+	/*
+	 NSDictionary* userInfo = self.accessToken.userInfo;
+	 NSString* userId = userInfo[@"userid"];
+	 if (userId)
+	 {
+	 NSLog(@"User: %@", userId);
 
-		NSMutableURLRequest* request = [self.client requestWithMethod:@"GET"
-																 path:@"user"
-														   parameters:@{@"action": @"getbyuserid",
-																		@"userid": userId}];
+	 NSMutableURLRequest* request = [self.client requestWithMethod:@"GET"
+	 path:@"user"
+	 parameters:@{@"action": @"getbyuserid",
+	 @"userid": userId}];
 
-		AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-		[manager HTTPRequestOperationWithRequest:request
-										 success:^(AFHTTPRequestOperation *operation, id responseObject)
-		 {
-			 NSLog(@"Wee success: %@", responseObject);
-		 }
-										 failure:^(AFHTTPRequestOperation *operation, NSError *error)
-		 {
-			 NSLog(@"BOO failure: %@", error);
-		 }];
-	}
-	else if (self.authenticationCompletionHandler)
-	{
-		NSError* error = [NSError errorWithDomain:@"ASMScaleKit.Withings"
-											 code:ASMWithingsServiceProviderNoUserID
-										 userInfo:@{NSLocalizedDescriptionKey: @"Did not receive user id"}];
-		self.authenticationCompletionHandler(nil, error);
-	}
+	 AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+	 [manager HTTPRequestOperationWithRequest:request
+	 success:^(AFHTTPRequestOperation *operation, id responseObject)
+	 {
+	 NSLog(@"Wee success: %@", responseObject);
+	 }
+	 failure:^(AFHTTPRequestOperation *operation, NSError *error)
+	 {
+	 NSLog(@"BOO failure: %@", error);
+	 }];
+	 }
+	 else if (self.authenticationCompletionHandler)
+	 {
+	 NSError* error = [NSError errorWithDomain:@"ASMScaleKit.Withings"
+	 code:ASMWithingsServiceProviderNoUserID
+	 userInfo:@{NSLocalizedDescriptionKey: @"Did not receive user id"}];
+	 self.authenticationCompletionHandler(nil, error);
+	 }
+	 */
 }
 
 - (void)authenticateFromViewController:(UIViewController*)viewController
@@ -80,35 +82,36 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 
 	NSURL* baseURL = [NSURL URLWithString:kWithingsAuthBaseURLString];
 
-	self.client = [[AFOAuth1Client alloc] initWithBaseURL:baseURL
-													  key:self.oauthKey
-												   secret:self.oauthSecret];
+	self.client = [[ASMOAuth1Client alloc] initWithBaseURL:baseURL
+													   key:self.oauthKey
+													secret:self.oauthSecret];
 
 	__weak typeof(self) wself = self;
-	[self.client authorizeUsingOAuthWithRequestTokenPath:@"account/request_token"
-								   userAuthorizationPath:@"account/authorize"
-											 callbackURL:[NSURL URLWithString:@"x-com-asmscalekit://success"]
-										 accessTokenPath:@"account/access_token"
-											accessMethod:@"GET"
-												   scope:@"read"
-												 success:^(AFOAuth1Token *accessToken, id responseObject)
+
+	[self.client authorizeWithRequestTokenPath:@"account/request_token"
+						userAuthenticationPath:@"account/authorize"
+							   accessTokenPath:@"account/access_token"
+								   callbackURL:[NSURL URLWithString:@"x-com-asmscalekit://success"]
+										 scope:nil //@"read"?
+								  accessMethod:ASMOAUTH1ClientAccessGETMethod
+					  requestParameterLocation:ASMOAuth1ClientRequestParameterURLQueryLocation
+									completion:^(ASMOAuth1Token* accessToken, NSError *error)
 	 {
 		 __strong typeof(wself) self = wself;
-		 self.accessToken = accessToken;
-
-		 self.client = [[AFOAuth1Client alloc] initWithBaseURL:[NSURL URLWithString:kWithingsBaseURLString]
-														   key:self.oauthKey
-														secret:self.oauthSecret];
-		 self.client.accessToken = self.accessToken;
-
-		 [self lookupUserInformation];
-	 }
-												 failure:^(NSError *error)
-	 {
-		 __strong typeof(wself) self = wself;
-		 if (self.authenticationCompletionHandler)
+		 if (error)
 		 {
-			 self.authenticationCompletionHandler(nil, error);
+			 __strong typeof(wself) self = wself;
+			 if (self.authenticationCompletionHandler)
+			 {
+				 self.authenticationCompletionHandler(nil, error);
+			 }
+		 }
+		 else
+		 {
+			 self.accessToken = accessToken;
+
+			 // TODO change base URL
+			 [self lookupUserInformation];
 		 }
 	 }];
 }
