@@ -45,10 +45,12 @@ typedef void(^ASMOauth1ClientAuthorizeCompletion)(ASMOAuth1Token* token, NSError
 - (void)authorizeWithRequestTokenPath:(NSString*)tokenPath
 			   userAuthenticationPath:(NSString*)authorizationPath
 					  accessTokenPath:(NSString*)accessTokenPath
-						  callbackURL:(NSURL*)callbackURL
 								scope:(NSString*)scope
 						 accessMethod:(ASMOAuth1ClientAccessMethod)accessMethod
 			 requestParameterLocation:(ASMOAuth1ClientRequestParameterLocation)requestParameterLocation
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+				   fromViewController:(UIViewController*)viewController
+#endif
 						   completion:(ASMOauth1ClientAuthorizeCompletion)completion;
 
 

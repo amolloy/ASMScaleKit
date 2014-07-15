@@ -15,6 +15,7 @@
 @property (nonatomic, strong, readonly) NSDate* expiration;
 @property (nonatomic, assign, readonly) BOOL renewable;
 @property (nonatomic, strong, readonly) NSDictionary* userInfo;
+@property (nonatomic, copy) NSString* verifier;
 
 - (id)initWithResponseString:(NSString*)responseString;
 

@@ -10,7 +10,12 @@
 #import "ASMOAuth1Token.h"
 #import <CommonCrypto/CommonHMAC.h>
 
-static NSString * const kASMOAuth1Version = @"1.0";
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+#import "ASMOAuth1AuthenticationViewController.h"
+#endif
+
+static NSString* const kASMOAuth1Version = @"1.0";
+static NSString* const kASMOAuth1CallbackURLString = @"asmoauth1client://success";
 
 @interface NSString (ASMOAuth1ClientHelpers)
 + (NSString*)stringWithOAuth1ClientSignatureMethod:(ASMOAuth1ClientSignatureMethod)signatureMethod;
@@ -36,6 +41,11 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 @property (nonatomic, copy) NSString* consumerKey;
 @property (nonatomic, copy) NSString* consumerSecret;
 @property (nonatomic, strong, readwrite) ASMOAuth1Token* accessToken;
+@property (nonatomic, copy) ASMOauth1ClientAuthorizeCompletion authorizationCompletion;
+
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+@property (nonatomic, strong) UIViewController* presentingViewController;
+#endif
 @end
 
 @implementation ASMOAuth1Client
@@ -57,24 +67,200 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 - (void)authorizeWithRequestTokenPath:(NSString*)tokenPath
 			   userAuthenticationPath:(NSString*)authorizationPath
 					  accessTokenPath:(NSString*)accessTokenPath
-						  callbackURL:(NSURL*)callbackURL
 								scope:(NSString*)scope
 						 accessMethod:(ASMOAuth1ClientAccessMethod)accessMethod
 			 requestParameterLocation:(ASMOAuth1ClientRequestParameterLocation)requestParameterLocation
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+				   fromViewController:(UIViewController*)viewController
+#endif
 						   completion:(ASMOauth1ClientAuthorizeCompletion)completion
 {
+	self.authorizationCompletion = completion;
+
+	__weak typeof(self) wself = self;
 	[self acquireOAuthRequestTokenWithPath:tokenPath
-							   callbackURL:(NSURL*)callbackURL
 									 scope:scope
 							  accessMethod:accessMethod
 				  requestParameterLocation:requestParameterLocation
-								completion:^(ASMOAuth1Token *requestToken, NSError *error) {
-									NSLog(@"Got the access token.");
-								}];
+								completion:^(ASMOAuth1Token* requestToken, NSError* error)
+	 {
+		 __strong typeof(self) self = wself;
+		 if (!error)
+		 {
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+			 self.presentingViewController = viewController;
+			 [self authenticateUserWithPath:authorizationPath
+							accessTokenPath:accessTokenPath
+							   requestToken:requestToken
+							   accessMethod:accessMethod
+				   requestParameterLocation:requestParameterLocation
+								 completion:^(ASMOAuth1Token *token, NSError *error)
+			 {
+				 NSLog(@"Authenticated user");
+			 }];
+#else
+#error Unimplemented
+#endif
+		 }
+		 else if (self.authorizationCompletion)
+		 {
+			 self.authorizationCompletion(nil, error);
+		 }
+	 }];
+}
+
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+- (void)authenticateUserWithPath:(NSString*)path
+				 accessTokenPath:(NSString*)accessTokenPath
+					requestToken:(ASMOAuth1Token*)requestToken
+					accessMethod:(ASMOAuth1ClientAccessMethod)accessMethod
+		requestParameterLocation:(ASMOAuth1ClientRequestParameterLocation)requestParameterLocation
+					  completion:(ASMOauth1ClientAuthorizeCompletion)completion
+{
+	NSURLComponents* urlComponents = [NSURLComponents componentsWithURL:[self.baseURL URLByAppendingPathComponent:path]
+												resolvingAgainstBaseURL:NO];
+	urlComponents.percentEncodedQuery = [NSString stringWithFormat:@"oauth_token=%@", [requestToken.key stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()]];
+
+	__weak typeof(self) wself = self;
+	dispatch_async(dispatch_get_main_queue(), ^{
+		ASMOAuth1AuthenticationViewController* vc = [[ASMOAuth1AuthenticationViewController alloc]
+													 initWithAuthorizationURL:urlComponents.URL
+													 sentinelURL:[NSURL URLWithString:kASMOAuth1CallbackURLString]
+													 completion:^(NSURL* authorizationURL, NSError* error)
+													 {
+														 __strong typeof(self) self = wself;
+														 [self.presentingViewController dismissViewControllerAnimated:YES
+																										   completion:nil];
+														 [self receivedAuthorizationURL:authorizationURL
+																		accessTokenPath:accessTokenPath
+																		   requestToken:requestToken
+																		   accessMethod:accessMethod
+															   requestParameterLocation:requestParameterLocation
+																				  error:error];
+													 }];
+		UINavigationController* nav = [[UINavigationController alloc] initWithRootViewController:vc];
+
+		[self.presentingViewController presentViewController:nav
+													animated:YES
+												  completion:nil];
+	});
+}
+#endif
+
+- (NSDictionary*)parametersFromQueryString:(NSString*)string
+{
+	NSMutableDictionary* parameters = [NSMutableDictionary dictionaryWithCapacity:0];
+	NSArray* kvPairs = [string componentsSeparatedByString:@"&"];
+	[kvPairs enumerateObjectsUsingBlock:^(NSString* kvPair, NSUInteger idx, BOOL *stop) {
+		NSArray* components = [kvPair componentsSeparatedByString:@"="];
+		if (components.count == 2)
+		{
+			NSString* key = components[0];
+			key = [key stringByReplacingPercentEscapesUsingEncoding:self.stringEncoding];
+			NSString* value = components[1];
+			value = [value stringByReplacingPercentEscapesUsingEncoding:self.stringEncoding];
+
+			if (key.length != 0 && value)
+			{
+				parameters[key] = value;
+			}
+		}
+	}];
+
+	return parameters.copy;
+}
+
+- (void)receivedAuthorizationURL:(NSURL*)url
+				 accessTokenPath:(NSString*)accessTokenPath
+					requestToken:(ASMOAuth1Token*)requestToken
+					accessMethod:(ASMOAuth1ClientAccessMethod)accessMethod
+		requestParameterLocation:(ASMOAuth1ClientRequestParameterLocation)requestParameterLocation
+						   error:(NSError*)error
+{
+	if (!error)
+	{
+		NSDictionary* parameters = [self parametersFromQueryString:url.query];
+		requestToken.verifier = parameters[@"oauth_verifier"];
+
+		__weak typeof(self) wself = self;
+		[self acquireOAuthAccessTokenWithPath:accessTokenPath
+								 requestToken:requestToken
+								 accessMethod:accessMethod
+					 requestParameterLocation:requestParameterLocation
+								   completion:^(ASMOAuth1Token* accessToken, id responseObject, NSError* error)
+		 {
+			 __strong typeof(self) self = wself;
+			 if (self.authorizationCompletion)
+			 {
+				 self.authorizationCompletion(accessToken, error);
+			 }
+		 }];
+	}
+	else if (self.authorizationCompletion)
+	{
+		self.authorizationCompletion(nil, error);
+	}
+}
+
+- (void)acquireOAuthAccessTokenWithPath:(NSString*)path
+                           requestToken:(ASMOAuth1Token*)requestToken
+                           accessMethod:(ASMOAuth1ClientAccessMethod)accessMethod
+			   requestParameterLocation:(ASMOAuth1ClientRequestParameterLocation)requestParameterLocation
+							 completion:(void (^)(ASMOAuth1Token* accessToken, id responseObject, NSError* error))completion
+{
+	NSAssert(accessMethod != ASMOAUTH1ClientAccessPOSTMethod, @"POST not yet supported");
+
+    if (requestToken.key && requestToken.verifier)
+	{
+        self.accessToken = requestToken;
+
+		NSURLComponents* components = [NSURLComponents componentsWithURL:[self.baseURL URLByAppendingPathComponent:path]
+												 resolvingAgainstBaseURL:NO];
+
+		NSString* oauthTokenParam = [NSString stringWithFormat:@"oauth_token=%@",
+									 [requestToken.key stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()]];
+		NSString* oauthVerifierParam = [NSString stringWithFormat:@"oauth_verifier=%@",
+										[requestToken.verifier stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()]];
+
+		components.percentEncodedQuery = [NSString stringWithFormat:@"%@&%@", oauthTokenParam, oauthVerifierParam];
+
+		NSMutableURLRequest* mutableRequest = [NSMutableURLRequest requestWithURL:components.URL];
+		[mutableRequest setHTTPMethod:[NSString stringWithOAuth1ClientAccessMethod:accessMethod]];
+		[mutableRequest setHTTPBody:nil];
+
+		NSURLRequest* request = [self requestWithOAuthParametersFromURLRequest:mutableRequest
+													  requestParameterLocation:requestParameterLocation];
+
+		NSURLSession* session = [NSURLSession sharedSession];
+		[[session dataTaskWithRequest:request completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
+			ASMOAuth1Token* accessToken = nil;
+			if (!error)
+			{
+				NSString* responseString = [[NSString alloc] initWithData:data encoding:self.stringEncoding];
+				if (responseString)
+				{
+					accessToken = [[ASMOAuth1Token alloc] initWithResponseString:responseString];
+				}
+			}
+
+			if (completion)
+			{
+				completion(accessToken, response, error);
+			}
+		}] resume];
+    }
+	else if (completion)
+	{
+		// TODO
+        NSDictionary* userInfo = [NSDictionary dictionaryWithObject:NSLocalizedStringFromTable(@"Bad OAuth response received from the server.", @"ASMOAuth1Client", nil) forKey:NSLocalizedFailureReasonErrorKey];
+        NSError* error = [[NSError alloc] initWithDomain:@"com.amolloy.oauth1client"
+													code:NSURLErrorBadServerResponse
+												userInfo:userInfo];
+        completion(nil, nil, error);
+    }
 }
 
 - (void)acquireOAuthRequestTokenWithPath:(NSString*)path
-							 callbackURL:(NSURL*)callbackURL
 								   scope:(NSString*)scope
 							accessMethod:(ASMOAuth1ClientAccessMethod)accessMethod
 				requestParameterLocation:(ASMOAuth1ClientRequestParameterLocation)requestParameterLocation
@@ -114,7 +300,7 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 	[mutableRequest setHTTPBody:nil];
 	NSURLRequest* request = [self requestWithOAuthParametersFromURLRequest:mutableRequest
 												  requestParameterLocation:requestParameterLocation
-															   callbackURL:callbackURL];
+															   callbackURL:[NSURL URLWithString:kASMOAuth1CallbackURLString]];
 
 	NSURLSession* session = [NSURLSession sharedSession];
 	[[session dataTaskWithRequest:request completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
@@ -127,10 +313,11 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 			{
 				accessToken = [[ASMOAuth1Token alloc] initWithResponseString:responseString];
 			}
-			else
+
+			if (!accessToken)
 			{
 				// TODO
-				error = [NSError errorWithDomain:@"TODO" code:1 userInfo:nil];
+				error = [NSError errorWithDomain:@"com.amolloy.scalekit" code:1 userInfo:@{NSLocalizedDescriptionKey:@"TODO"}];
 			}
 		}
 
@@ -157,24 +344,18 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 
 	if (ASMOAuth1ClientRequestParameterURLQueryLocation == requestParameterLocation)
 	{
-		NSURLComponents* urlComponents = [NSURLComponents componentsWithURL:request.URL
-													resolvingAgainstBaseURL:NO];
-		NSString* query = [urlComponents query];
-
-		if (query)
-		{
-			query = [query stringByAppendingString:@"&"];
-		}
-		else
-		{
-			query = @"";
-		}
-
 		NSMutableArray* oauthParameters = [self oauthParametersQueryComponents].mutableCopy;
 		if (callbackURL)
 		{
 			[oauthParameters addObject:[NSString stringWithFormat:@"oauth_callback=%@",
 										[[callbackURL absoluteString] stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()]]];
+		}
+		NSURLComponents* urlComponents = [NSURLComponents componentsWithURL:request.URL
+													resolvingAgainstBaseURL:NO];
+		NSString* query = [urlComponents percentEncodedQuery];
+		if (query.length != 0)
+		{
+			[oauthParameters addObjectsFromArray:[query componentsSeparatedByString:@"&"]];
 		}
 
 		NSString* signature = [self oauthSignatureForURLRequest:newRequest
@@ -187,7 +368,7 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 
 		[oauthParameters sortUsingSelector:@selector(compare:)];
 
-		urlComponents.percentEncodedQuery = [query stringByAppendingString:[oauthParameters componentsJoinedByString:@"&"]];
+		urlComponents.percentEncodedQuery = [oauthParameters componentsJoinedByString:@"&"];
 		newRequest.URL = urlComponents.URL;
 	}
 	else if (ASMOAuth1ClientRequestParameterAuthorizationHeaderLocation == requestParameterLocation)
