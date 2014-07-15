@@ -175,6 +175,19 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 		NSDictionary* parameters = [self parametersFromQueryString:url.query];
 		requestToken.verifier = parameters[@"oauth_verifier"];
 
+		if (self.providerHints & ASMOAuth1ClientProviderIncludeUserInfoInAccessRequestHint)
+		{
+			NSMutableDictionary* mutableParameters = parameters.mutableCopy;
+			for (NSString* key in parameters.allKeys)
+			{
+				if ([key hasPrefix:@"oauth_"])
+				{
+					[mutableParameters removeObjectForKey:key];
+				}
+			}
+			requestToken.userInfo = mutableParameters.copy;
+		}
+
 		__weak typeof(self) wself = self;
 		[self acquireOAuthAccessTokenWithPath:accessTokenPath
 								 requestToken:requestToken
@@ -208,10 +221,40 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 		NSURLComponents* components = [NSURLComponents componentsWithURL:[self.baseURL URLByAppendingPathComponent:path]
 												 resolvingAgainstBaseURL:NO];
 
-		NSString* oauthVerifierParam = [NSString stringWithFormat:@"oauth_verifier=%@",
-										[requestToken.verifier stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()]];
+		if (!(self.providerHints & ASMOAuth1ClientProviderSuppressVerifierHint))
+		{
+			NSString* oauthVerifierParam = [NSString stringWithFormat:@"oauth_verifier=%@",
+											[requestToken.verifier stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()]];
 
-		components.percentEncodedQuery = oauthVerifierParam;
+			components.percentEncodedQuery = oauthVerifierParam;
+		}
+
+		if (self.providerHints & ASMOAuth1ClientProviderIncludeUserInfoInAccessRequestHint)
+		{
+			if (requestToken.userInfo.count != 0)
+			{
+				NSMutableArray* userInfoKVPairs = [NSMutableArray arrayWithCapacity:requestToken.userInfo.count];
+				[requestToken.userInfo enumerateKeysAndObjectsUsingBlock:^(NSString* key, NSString* value, BOOL *stop) {
+					NSString* kvPair = [NSString stringWithFormat:@"%@=%@",
+										[key stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()],
+										[value stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()]];
+					[userInfoKVPairs addObject:kvPair];
+				}];
+
+				NSString* newQuery = components.percentEncodedQuery;
+				if (!newQuery)
+				{
+					newQuery = @"";
+				}
+				if (newQuery.length != 0)
+				{
+					newQuery = [newQuery stringByAppendingString:@"&"];
+				}
+
+				newQuery = [newQuery stringByAppendingString:[userInfoKVPairs componentsJoinedByString:@"&"]];
+				components.percentEncodedQuery = newQuery;
+			}
+		}
 
 		NSMutableURLRequest* mutableRequest = [NSMutableURLRequest requestWithURL:components.URL];
 		[mutableRequest setHTTPMethod:[NSString stringWithOAuth1ClientAccessMethod:accessMethod]];

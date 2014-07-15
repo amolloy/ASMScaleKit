@@ -14,7 +14,6 @@
 @property (nonatomic, copy, readwrite) NSString* session;
 @property (nonatomic, strong, readwrite) NSDate* expiration;
 @property (nonatomic, assign, readwrite) BOOL renewable;
-@property (nonatomic, strong, readwrite) NSDictionary* userInfo;
 @end
 
 @implementation ASMOAuth1Token

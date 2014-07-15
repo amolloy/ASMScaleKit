@@ -31,8 +31,16 @@ typedef NS_ENUM(NSInteger, ASMOAuth1ClientSignatureMethod)
 	ASMOAuth1ClientHMACSHA1SignatureMethod,
 };
 
+typedef NS_OPTIONS(NSInteger, ASMOAuth1ClientProviderHint)
+{
+	ASMOAuth1ClientProviderNoHint = 0,
+	ASMOAuth1ClientProviderIncludeUserInfoInAccessRequestHint = 1 << 0,
+	ASMOAuth1ClientProviderSuppressVerifierHint = 1 << 1,
+};
+
 @interface ASMOAuth1Client : NSObject
 
+@property (nonatomic, assign) ASMOAuth1ClientProviderHint providerHints;
 @property (nonatomic, assign) ASMOAuth1ProtocolParameterLocation protocolParameterLocation;
 @property (nonatomic, strong) NSURL* baseURL;
 @property (nonatomic, assign) ASMOAuth1ClientSignatureMethod signatureMethod;
