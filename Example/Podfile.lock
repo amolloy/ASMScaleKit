@@ -1,0 +1,22 @@
+PODS:
+  - ASMScaleKit (0.1.0):
+    - ASMScaleKit/Withings
+  - ASMScaleKit/Withings (0.1.0)
+  - Expecta (0.3.1)
+  - Specta (0.2.1)
+
+DEPENDENCIES:
+  - ASMScaleKit (from `../`)
+  - Expecta
+  - Specta (~> 0.2.1)
+
+EXTERNAL SOURCES:
+  ASMScaleKit:
+    :path: ../
+
+SPEC CHECKSUMS:
+  ASMScaleKit: 56e6349c8cf2130e9fcf753213ef2bb56cba7b28
+  Expecta: 03aabd0a89d8dea843baecb19a7fd7466a69a31d
+  Specta: 9141310f46b1f68b676650ff2854e1ed0b74163a
+
+COCOAPODS: 0.33.1
