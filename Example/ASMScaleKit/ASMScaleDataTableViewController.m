@@ -16,7 +16,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-	[self login];
+	if (![self.provider loggedIn])
+	{
+		[self login];
+	}
 }
 
 - (void)login

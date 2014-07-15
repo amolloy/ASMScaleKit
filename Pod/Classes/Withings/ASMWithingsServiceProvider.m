@@ -35,6 +35,12 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 	return self;
 }
 
+
+- (BOOL)loggedIn
+{
+	return self.client != nil;
+}
+
 - (void)logout
 {
 

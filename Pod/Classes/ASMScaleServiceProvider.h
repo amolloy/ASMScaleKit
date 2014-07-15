@@ -13,6 +13,14 @@
 @protocol ASMScaleServiceProvider <NSObject>
 
 /**
+ *	Returns the logged in status for the service provider.
+ *
+ *	@return YES if the service provider is logged in and does not need authentication.
+ *	This method is temporary and will be removed when multi-user accounts support is added.
+ */
+- (BOOL)loggedIn;
+
+/**
  *	Log the account out of the service provider (if appropriate).
  */
 - (void)logout;
