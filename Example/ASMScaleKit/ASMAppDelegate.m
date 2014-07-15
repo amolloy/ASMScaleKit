@@ -7,27 +7,12 @@
 //
 
 #import "ASMAppDelegate.h"
-#import <AFOAuth1Client~wouterds/AFOAuth1Client.h>
 
 @implementation ASMAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
-    return YES;
-}
-
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation
-{
-    NSNotification* notification = [NSNotification notificationWithName:kAFApplicationLaunchedWithURLNotification
-																 object:nil
-															   userInfo:@{kAFApplicationLaunchOptionsURLKey: url}];
-    [[NSNotificationCenter defaultCenter] postNotification:notification];
-
-    return YES;
+	return YES;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
