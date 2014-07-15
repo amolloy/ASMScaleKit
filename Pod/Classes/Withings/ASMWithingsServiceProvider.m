@@ -48,37 +48,45 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 
 - (void)lookupUserInformation
 {
-	/*
-	 NSDictionary* userInfo = self.accessToken.userInfo;
-	 NSString* userId = userInfo[@"userid"];
-	 if (userId)
-	 {
-	 NSLog(@"User: %@", userId);
+	NSDictionary* userInfo = self.accessToken.userInfo;
+	NSString* userId = userInfo[@"userid"];
+	if (userId)
+	{
+		NSLog(@"User: %@", userId);
 
-	 NSMutableURLRequest* request = [self.client requestWithMethod:@"GET"
-	 path:@"user"
-	 parameters:@{@"action": @"getbyuserid",
-	 @"userid": userId}];
+		NSURLComponents* components = [NSURLComponents componentsWithURL:[self.client.baseURL URLByAppendingPathComponent:@"user"]
+												 resolvingAgainstBaseURL:NO];
+		components.query = [NSString stringWithFormat:@"action=getbyuserid&userid=%@", userId];
 
-	 AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-	 [manager HTTPRequestOperationWithRequest:request
-	 success:^(AFHTTPRequestOperation *operation, id responseObject)
-	 {
-	 NSLog(@"Wee success: %@", responseObject);
-	 }
-	 failure:^(AFHTTPRequestOperation *operation, NSError *error)
-	 {
-	 NSLog(@"BOO failure: %@", error);
-	 }];
-	 }
-	 else if (self.authenticationCompletionHandler)
-	 {
-	 NSError* error = [NSError errorWithDomain:@"ASMScaleKit.Withings"
-	 code:ASMWithingsServiceProviderNoUserID
-	 userInfo:@{NSLocalizedDescriptionKey: @"Did not receive user id"}];
-	 self.authenticationCompletionHandler(nil, error);
-	 }
-	 */
+		NSURLRequest* request = [NSURLRequest requestWithURL:components.URL];
+		request = [self.client requestWithOAuthParametersFromURLRequest:request];
+
+		NSURLSession* session = [NSURLSession sharedSession];
+		[[session dataTaskWithRequest:request
+					completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+						if (error)
+						{
+							NSLog(@"Error getting user info: %@", error);
+						}
+						else
+						{
+							NSString* responseString = [[NSString alloc] initWithData:data
+																			 encoding:NSUTF8StringEncoding];
+
+							NSLog(@"Response:");
+							NSLog(@"%@", response);
+							NSLog(@"Response string from data:");
+							NSLog(@"%@", responseString);
+						}
+					}] resume];
+	}
+	else if (self.authenticationCompletionHandler)
+	{
+		NSError* error = [NSError errorWithDomain:@"ASMScaleKit.Withings"
+											 code:ASMWithingsServiceProviderNoUserID
+										 userInfo:@{NSLocalizedDescriptionKey: @"Did not receive user id"}];
+		self.authenticationCompletionHandler(nil, error);
+	}
 }
 
 - (void)authenticateFromViewController:(UIViewController*)viewController
@@ -91,6 +99,7 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 	self.client = [[ASMOAuth1Client alloc] initWithBaseURL:baseURL
 													   key:self.oauthKey
 													secret:self.oauthSecret];
+	self.client.protocolParameterLocation = ASMOAuth1ProtocolParameterURLQueryLocation;
 
 	__weak typeof(self) wself = self;
 
@@ -99,7 +108,6 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 							   accessTokenPath:@"account/access_token"
 										 scope:nil //@"read"?
 								  accessMethod:ASMOAUTH1ClientAccessGETMethod
-					  requestParameterLocation:ASMOAuth1ClientRequestParameterURLQueryLocation
 							fromViewController:viewController
 									completion:^(ASMOAuth1Token* accessToken, NSError *error)
 	 {
@@ -116,7 +124,9 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 		 {
 			 self.accessToken = accessToken;
 
-			 // TODO change base URL
+			 // Now that we're done authenticating, switch to the main API URL
+			 self.client.baseURL = [NSURL URLWithString:kWithingsBaseURLString];
+
 			 [self lookupUserInformation];
 		 }
 	 }];
