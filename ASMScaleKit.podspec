@@ -18,19 +18,20 @@ Pod::Spec.new do |s|
                        * Don't worry about the indent, we strip it!
                        DESC
   s.homepage         = "https://github.com/<GITHUB_USERNAME>/ASMScaleKit"
-  # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
   s.license          = 'MIT'
   s.author           = { "Andrew Molloy" => "amolloy@gmail.com" }
   s.source           = { :git => "https://github.com/<GITHUB_USERNAME>/ASMScaleKit.git", :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.social_media_url = 'https://twitter.com/amolloy'
 
   s.platform     = :ios, '7.0'
   s.requires_arc = true
 
-  s.source_files = 'Pod/Classes'
-  s.resources = 'Pod/Assets/*.png'
+  s.source_files = 'Pod/Classes', 'Pod/Classes/OAuth'
+  s.public_header_files = 'Pod/Classes/**/*.h'
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  s.subspec 'Withings' do |ws|
+    ws.source_files = 'Pod/Classes/Withings'
+    ws.public_header_files = 'Pod/Classes/Withings/*.h'
+  end
+
 end
