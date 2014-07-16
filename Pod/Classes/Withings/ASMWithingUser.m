@@ -12,6 +12,21 @@
 
 - (NSString*)displayName
 {
-
+	return @"";
 }
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+	return nil;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+}
+
++ (BOOL)supportsSecureCoding
+{
+	return YES;
+}
+
 @end
