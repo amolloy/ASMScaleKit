@@ -208,6 +208,7 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 								   completion:^(ASMOAuth1Token* accessToken, id responseObject, NSError* error)
 		 {
 			 __strong typeof(self) self = wself;
+			 self.accessToken = accessToken;
 			 if (self.authorizationCompletion)
 			 {
 				 self.authorizationCompletion(accessToken, error);
