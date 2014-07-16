@@ -89,11 +89,7 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 			 [self authenticateUserWithPath:authorizationPath
 							accessTokenPath:accessTokenPath
 							   requestToken:requestToken
-							   accessMethod:accessMethod
-								 completion:^(ASMOAuth1Token *token, NSError *error)
-			 {
-				 NSLog(@"Authenticated user");
-			 }];
+							   accessMethod:accessMethod];
 #else
 #error Unimplemented
 #endif
@@ -110,7 +106,6 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 				 accessTokenPath:(NSString*)accessTokenPath
 					requestToken:(ASMOAuth1Token*)requestToken
 					accessMethod:(ASMOAuth1ClientAccessMethod)accessMethod
-					  completion:(ASMOauth1ClientAuthorizeCompletion)completion
 {
 	NSURLComponents* urlComponents = [NSURLComponents componentsWithURL:[self.baseURL URLByAppendingPathComponent:path]
 												resolvingAgainstBaseURL:NO];
