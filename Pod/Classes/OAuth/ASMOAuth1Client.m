@@ -9,6 +9,7 @@
 #import "ASMOAuth1Client.h"
 #import "ASMOAuth1Token.h"
 #import <CommonCrypto/CommonHMAC.h>
+#import <libextobjc/EXTScope.h>
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
 #import "ASMOAuth1AuthenticationViewController.h"
@@ -77,13 +78,13 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 {
 	self.authorizationCompletion = completion;
 
-	__weak typeof(self) wself = self;
+	@weakify(self);
 	[self acquireOAuthRequestTokenWithPath:tokenPath
 									 scope:scope
 							  accessMethod:accessMethod
 								completion:^(ASMOAuth1Token* requestToken, NSError* error)
 	 {
-		 __strong typeof(self) self = wself;
+		 @strongify(self);
 		 if (!error)
 		 {
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
@@ -122,14 +123,14 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 								   resolvingAgainstBaseURL:NO];
 	}
 
-	__weak typeof(self) wself = self;
+	@weakify(self);
 	dispatch_async(dispatch_get_main_queue(), ^{
 		ASMOAuth1AuthenticationViewController* vc = [[ASMOAuth1AuthenticationViewController alloc]
 													 initWithAuthorizationURL:urlComponents.URL
 													 sentinelURL:[NSURL URLWithString:kASMOAuth1CallbackURLString]
 													 completion:^(NSURL* authorizationURL, NSError* error)
 													 {
-														 __strong typeof(self) self = wself;
+														 @strongify(self);
 														 [self.presentingViewController dismissViewControllerAnimated:YES
 																										   completion:nil];
 														 [self receivedAuthorizationURL:authorizationURL
@@ -194,13 +195,13 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 			requestToken.userInfo = mutableParameters.copy;
 		}
 
-		__weak typeof(self) wself = self;
+		@weakify(self);
 		[self acquireOAuthAccessTokenWithPath:accessTokenPath
 								 requestToken:requestToken
 								 accessMethod:accessMethod
 								   completion:^(ASMOAuth1Token* accessToken, id responseObject, NSError* error)
 		 {
-			 __strong typeof(self) self = wself;
+			 @strongify(self);
 			 self.accessToken = accessToken;
 			 if (self.authorizationCompletion)
 			 {

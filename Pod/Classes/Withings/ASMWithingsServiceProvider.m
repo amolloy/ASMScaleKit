@@ -9,6 +9,7 @@
 #import "ASMWithingsServiceProvider.h"
 #import "ASMOAuth1Client.h"
 #import "ASMOAuth1Token.h"
+#import <libextobjc/EXTScope.h>
 
 @interface ASMWithingsServiceProvider ()
 @property (nonatomic, copy) NSString* oauthKey;
@@ -100,8 +101,7 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 	self.client.protocolParameterLocation = ASMOAuth1ProtocolParameterURLQueryLocation;
 	self.client.providerHints = ASMOAuth1ClientWithingsProviderHints;
 
-	__weak typeof(self) wself = self;
-
+	@weakify(self);
 	[self.client authorizeWithRequestTokenPath:@"account/request_token"
 						userAuthenticationPath:@"account/authorize"
 							   accessTokenPath:@"account/access_token"
@@ -110,10 +110,9 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 							fromViewController:viewController
 									completion:^(ASMOAuth1Token* accessToken, NSError *error)
 	 {
-		 __strong typeof(wself) self = wself;
+		 @strongify(self);
 		 if (error)
 		 {
-			 __strong typeof(wself) self = wself;
 			 if (self.authenticationCompletionHandler)
 			 {
 				 self.authenticationCompletionHandler(nil, error);
