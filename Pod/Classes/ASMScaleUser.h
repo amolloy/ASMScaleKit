@@ -11,7 +11,7 @@
 /**
  *	Represents an individual (user) of a particular service.
  */
-@protocol ASMScaleUser <NSSecureCoding>
+@protocol ASMScaleUser <NSObject, NSSecureCoding>
 
 /**
  *	A string representing this user appropriate for displaying in a user interface.
