@@ -21,9 +21,9 @@
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		B4654BD91971B2280025CB56 /* ASMScaleDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4654BD81971B2280025CB56 /* ASMScaleDataTableViewController.m */; };
-		B4654BDC1971B27A0025CB56 /* ASMServiceProvidersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4654BDB1971B27A0025CB56 /* ASMServiceProvidersTableViewController.m */; };
 		B4654BE71974BB150025CB56 /* ASMOAuth1ClientTestsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B4654BE61974BB150025CB56 /* ASMOAuth1ClientTestsSpec.m */; };
 		B4654BE919754FE10025CB56 /* WithingsKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4654BE819754FE10025CB56 /* WithingsKeys.plist */; };
+		B46960841977143B00ABB909 /* ASMServiceProvidersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B46960831977143B00ABB909 /* ASMServiceProvidersTableViewController.m */; };
 		D9DD13D0012C4FCEB1DEFD99 /* libPods-Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 45A25D76E5D14C23B1AFF527 /* libPods-Tests.a */; };
 /* End PBXBuildFile section */
 
@@ -63,10 +63,10 @@
 		832D0CBF834E490385D9030A /* ASMScaleKit.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = ASMScaleKit.podspec; path = ../ASMScaleKit.podspec; sourceTree = "<group>"; };
 		B4654BD71971B2280025CB56 /* ASMScaleDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASMScaleDataTableViewController.h; sourceTree = "<group>"; };
 		B4654BD81971B2280025CB56 /* ASMScaleDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASMScaleDataTableViewController.m; sourceTree = "<group>"; };
-		B4654BDA1971B27A0025CB56 /* ASMServiceProvidersTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASMServiceProvidersTableViewController.h; sourceTree = "<group>"; };
-		B4654BDB1971B27A0025CB56 /* ASMServiceProvidersTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASMServiceProvidersTableViewController.m; sourceTree = "<group>"; };
 		B4654BE61974BB150025CB56 /* ASMOAuth1ClientTestsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASMOAuth1ClientTestsSpec.m; sourceTree = "<group>"; };
 		B4654BE819754FE10025CB56 /* WithingsKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = WithingsKeys.plist; sourceTree = "<group>"; };
+		B46960821977143B00ABB909 /* ASMServiceProvidersTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASMServiceProvidersTableViewController.h; sourceTree = "<group>"; };
+		B46960831977143B00ABB909 /* ASMServiceProvidersTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASMServiceProvidersTableViewController.m; sourceTree = "<group>"; };
 		DEAB457C860F496B92391BC7 /* Pods-Tests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.xcconfig"; path = "Pods/Pods-Tests.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -141,8 +141,8 @@
 				6003F594195388D20070C39A /* Supporting Files */,
 				B4654BD71971B2280025CB56 /* ASMScaleDataTableViewController.h */,
 				B4654BD81971B2280025CB56 /* ASMScaleDataTableViewController.m */,
-				B4654BDA1971B27A0025CB56 /* ASMServiceProvidersTableViewController.h */,
-				B4654BDB1971B27A0025CB56 /* ASMServiceProvidersTableViewController.m */,
+				B46960821977143B00ABB909 /* ASMServiceProvidersTableViewController.h */,
+				B46960831977143B00ABB909 /* ASMServiceProvidersTableViewController.m */,
 			);
 			path = ASMScaleKit;
 			sourceTree = "<group>";
@@ -356,7 +356,7 @@
 			files = (
 				6003F59E195388D20070C39A /* ASMAppDelegate.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
-				B4654BDC1971B27A0025CB56 /* ASMServiceProvidersTableViewController.m in Sources */,
+				B46960841977143B00ABB909 /* ASMServiceProvidersTableViewController.m in Sources */,
 				B4654BD91971B2280025CB56 /* ASMScaleDataTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
