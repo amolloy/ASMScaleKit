@@ -53,8 +53,7 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 	NSString* userId = userInfo[@"userid"];
 	if (userId)
 	{
-		NSURLComponents* components = [NSURLComponents componentsWithURL:[self.client.baseURL URLByAppendingPathComponent:@"user"]
-												 resolvingAgainstBaseURL:NO];
+		NSURLComponents* components = [NSURLComponents componentsWithString:[kWithingsBaseURLString stringByAppendingPathComponent:@"user"]];
 		components.query = [NSString stringWithFormat:@"action=getbyuserid&userid=%@", userId];
 
 		NSURLRequest* request = [NSURLRequest requestWithURL:components.URL];
@@ -93,9 +92,9 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 {
 	self.authenticationCompletionHandler = completion;
 
-	NSURL* baseURL = [NSURL URLWithString:kWithingsAuthBaseURLString];
+	NSURL* oauthURLBase = [NSURL URLWithString:kWithingsAuthBaseURLString];
 
-	self.client = [[ASMOAuth1Client alloc] initWithBaseURL:baseURL
+	self.client = [[ASMOAuth1Client alloc] initWithOAuthURLBase:oauthURLBase
 													   key:self.oauthKey
 													secret:self.oauthSecret];
 	self.client.protocolParameterLocation = ASMOAuth1ProtocolParameterURLQueryLocation;
@@ -121,10 +120,6 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 		 else
 		 {
 			 self.accessToken = accessToken;
-
-			 // Now that we're done authenticating, switch to the main API URL
-			 self.client.baseURL = [NSURL URLWithString:kWithingsBaseURLString];
-
 			 [self lookupUserInformation];
 		 }
 	 }];

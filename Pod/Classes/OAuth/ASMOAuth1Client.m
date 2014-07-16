@@ -44,6 +44,7 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 @property (nonatomic, copy) NSString* consumerSecret;
 @property (nonatomic, strong, readwrite) ASMOAuth1Token* accessToken;
 @property (nonatomic, copy) ASMOauth1ClientAuthorizeCompletion authorizationCompletion;
+@property (nonatomic, strong) NSURL* oauthURLBase;
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
 @property (nonatomic, strong) UIViewController* presentingViewController;
@@ -52,12 +53,12 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 
 @implementation ASMOAuth1Client
 
-- (instancetype)initWithBaseURL:(NSURL*)baseURL key:(NSString*)key secret:(NSString*)secret
+- (instancetype)initWithOAuthURLBase:(NSURL*)oauthURLBase key:(NSString*)key secret:(NSString*)secret
 {
 	self = [super init];
 	if (self)
 	{
-		self.baseURL = baseURL;
+		self.oauthURLBase = oauthURLBase;
 		self.consumerKey = key;
 		self.consumerSecret = secret;
 		self.signatureMethod = ASMOAuth1ClientHMACSHA1SignatureMethod;
@@ -110,7 +111,7 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 					requestToken:(ASMOAuth1Token*)requestToken
 					accessMethod:(ASMOAuth1ClientAccessMethod)accessMethod
 {
-	NSURLComponents* urlComponents = [NSURLComponents componentsWithURL:[self.baseURL URLByAppendingPathComponent:path]
+	NSURLComponents* urlComponents = [NSURLComponents componentsWithURL:[self.oauthURLBase URLByAppendingPathComponent:path]
 												resolvingAgainstBaseURL:NO];
 	urlComponents.percentEncodedQuery = [NSString stringWithFormat:@"oauth_token=%@", [requestToken.key stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()]];
 
@@ -226,7 +227,7 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 	{
         self.accessToken = requestToken;
 
-		NSURLComponents* components = [NSURLComponents componentsWithURL:[self.baseURL URLByAppendingPathComponent:path]
+		NSURLComponents* components = [NSURLComponents componentsWithURL:[self.oauthURLBase URLByAppendingPathComponent:path]
 												 resolvingAgainstBaseURL:NO];
 
 		if (!(self.providerHints & ASMOAuth1ClientProviderSuppressVerifierHint))
@@ -306,7 +307,7 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 {
 	NSAssert(ASMOAUTH1ClientAccessPOSTMethod != accessMethod, @"POST not yet supported");
 
-	NSURLComponents* urlComponents = [NSURLComponents componentsWithURL:[self.baseURL URLByAppendingPathComponent:path]
+	NSURLComponents* urlComponents = [NSURLComponents componentsWithURL:[self.oauthURLBase URLByAppendingPathComponent:path]
 												resolvingAgainstBaseURL:NO];
 
 	NSMutableDictionary* parameters = @{}.mutableCopy;

@@ -48,13 +48,12 @@ extern NSInteger ASMOAuth1ClientWithingsProviderHints;
 
 @property (nonatomic, assign) ASMOAuth1ClientProviderHint providerHints;
 @property (nonatomic, assign) ASMOAuth1ProtocolParameterLocation protocolParameterLocation;
-@property (nonatomic, strong) NSURL* baseURL;
 @property (nonatomic, assign) ASMOAuth1ClientSignatureMethod signatureMethod;
 @property (nonatomic, copy) NSString* realm;
 @property (nonatomic, strong, readonly) ASMOAuth1Token* accessToken;
 @property (nonatomic, assign) NSUInteger stringEncoding;
 
-- (instancetype)initWithBaseURL:(NSURL*)baseURL key:(NSString*)key secret:(NSString*)secret;
+- (instancetype)initWithOAuthURLBase:(NSURL*)oauthURLBase key:(NSString*)key secret:(NSString*)secret;
 
 typedef void(^ASMOauth1ClientAuthorizeCompletion)(ASMOAuth1Token* token, NSError* error);
 
