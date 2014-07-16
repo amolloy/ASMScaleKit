@@ -47,6 +47,12 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 
 }
 
+- (NSString*)displayName
+{
+	// TODO Trademarks / localization / etc
+	return @"Withings";
+}
+
 - (void)lookupUserInformation
 {
 	NSDictionary* userInfo = self.accessToken.userInfo;

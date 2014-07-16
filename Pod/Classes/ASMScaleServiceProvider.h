@@ -26,6 +26,13 @@
 - (void)logout;
 
 /**
+ *	Returns a name for this provider appropriate for display in a user interface;
+ *
+ *	@return a name for this provider appropriate for display in a user interface;
+ */
+- (NSString*)displayName;
+
+/**
  *	Completion handler for authenticating a scale service provider.
  *
  *	@param users If authentication succeeded, contains a list of available ASMScaleUsers for this service.
