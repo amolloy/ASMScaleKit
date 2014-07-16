@@ -33,6 +33,13 @@
 - (NSString*)displayName;
 
 /**
+ *	Returns the class this provider uses to represent users.
+ *
+ *	@return the class this provider uses to represent users.
+ */
+- (Class)userClass;
+
+/**
  *	Completion handler for authenticating a scale service provider.
  *
  *	@param users If authentication succeeded, contains a list of available ASMScaleUsers for this service.
