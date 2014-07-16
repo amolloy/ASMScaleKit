@@ -7,6 +7,7 @@
 //
 
 @protocol ASMScaleServiceProvider;
+@protocol ASMScaleUser;
 
 @interface ASMScaleManager : NSObject
 
@@ -14,5 +15,6 @@
 
 - (void)registerServiceProvider:(id<ASMScaleServiceProvider>)serviceProvider;
 - (NSArray*)serviceProviders;
+- (id<ASMScaleServiceProvider>)serviceProviderForUser:(id<ASMScaleUser>)user;
 
 @end

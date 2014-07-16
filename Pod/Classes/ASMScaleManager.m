@@ -7,6 +7,8 @@
 //
 
 #import "ASMScaleManager.h"
+#import "ASMScaleServiceProvider.h"
+#import "ASMScaleUser.h"
 
 @interface ASMScaleManager ()
 @property (nonatomic, strong) NSMutableArray* providers;
@@ -22,6 +24,19 @@
 - (NSArray*)serviceProviders
 {
 	return self.providers.copy;
+}
+
+- (id<ASMScaleServiceProvider>)serviceProviderForUser:(id<ASMScaleUser>)user
+{
+	__block id<ASMScaleServiceProvider> provider = nil;
+	[self.providers enumerateObjectsUsingBlock:^(id<ASMScaleServiceProvider> obj, NSUInteger idx, BOOL *stop) {
+		if ([user isKindOfClass:[obj userClass]])
+		{
+			provider = obj;
+			*stop = YES;
+		}
+	}];
+	return provider;
 }
 
 #pragma mark - Singleton
