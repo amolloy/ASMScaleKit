@@ -39,6 +39,8 @@ typedef NS_OPTIONS(NSInteger, ASMOAuth1ClientProviderHint)
 	ASMOAuth1ClientIncludeFullOAuthParametersInAuthenticationHint = 1 << 2
 };
 
+extern NSInteger ASMOAuth1ClientWithingsProviderHints;
+
 @interface ASMOAuth1Client : NSObject
 
 @property (nonatomic, assign) ASMOAuth1ClientProviderHint providerHints;

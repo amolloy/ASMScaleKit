@@ -14,6 +14,8 @@
 #import "ASMOAuth1AuthenticationViewController.h"
 #endif
 
+NSInteger ASMOAuth1ClientWithingsProviderHints = ASMOAuth1ClientProviderIncludeUserInfoInAccessRequestHint | ASMOAuth1ClientProviderSuppressVerifierHint | ASMOAuth1ClientIncludeFullOAuthParametersInAuthenticationHint;
+
 static NSString* const kASMOAuth1Version = @"1.0";
 static NSString* const kASMOAuth1CallbackURLString = @"asmoauth1client://success";
 

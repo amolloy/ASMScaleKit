@@ -98,7 +98,7 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 													   key:self.oauthKey
 													secret:self.oauthSecret];
 	self.client.protocolParameterLocation = ASMOAuth1ProtocolParameterURLQueryLocation;
-	self.client.providerHints = ASMOAuth1ClientProviderIncludeUserInfoInAccessRequestHint | ASMOAuth1ClientProviderSuppressVerifierHint | ASMOAuth1ClientIncludeFullOAuthParametersInAuthenticationHint;
+	self.client.providerHints = ASMOAuth1ClientWithingsProviderHints;
 
 	__weak typeof(self) wself = self;
 
