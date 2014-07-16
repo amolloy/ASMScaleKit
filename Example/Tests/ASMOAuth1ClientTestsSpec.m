@@ -9,15 +9,24 @@
 #import <Expecta/Expecta.h>
 #import <ASMSCaleKit/ASMOAuth1Client.h>
 
+// Yeah I know this is bad, but better than making a class category with a name like "fortesting"
+// just for one method.
+@interface ASMOAuth1Client ()
+- (NSString*)HMACSHA1SignatureForURLRequest:(NSURLRequest*)request
+							queryParameters:(NSArray*)queryParameters
+						 postBodyParameters:(NSArray*)postBodyParameters
+									  token:(ASMOAuth1Token*)token;
+@end
+
 SpecBegin(ASMOAuth1Client)
 
 describe(@"ASMOAuth1Client", ^{
 	it(@"should calculate HMAC-SHA1 correctly",
 	   ^{
 		   NSURL* url = [NSURL URLWithString:@"https://oauth.withings.com"];
-		   ASMOAuth1Client* testClient = [[ASMOAuth1Client alloc] initWithBaseURL:url
-																			  key:@"abcdef0123456789abcdef"
-																		   secret:@"abcdef0123456789abcdef"];
+		   ASMOAuth1Client* testClient = [[ASMOAuth1Client alloc] initWithOAuthURLBase:url
+																				   key:@"abcdef0123456789abcdef"
+																				secret:@"abcdef0123456789abcdef"];
 
 		   NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[url URLByAppendingPathComponent:@"account/request_token"]];
 
