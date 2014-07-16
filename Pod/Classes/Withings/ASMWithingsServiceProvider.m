@@ -9,7 +9,7 @@
 #import "ASMWithingsServiceProvider.h"
 #import "ASMOAuth1Client.h"
 #import "ASMOAuth1Token.h"
-#import "ASMWithingUser.h"
+#import "ASMWithingsUser.h"
 #import <libextobjc/EXTScope.h>
 
 @interface ASMWithingsServiceProvider ()
@@ -56,7 +56,7 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 
 - (Class)userClass
 {
-	return [ASMWithingUser class];
+	return [ASMWithingsUser class];
 }
 
 - (void)lookupUserInformation

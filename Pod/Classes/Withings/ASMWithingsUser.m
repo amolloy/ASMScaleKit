@@ -6,9 +6,9 @@
 //
 //
 
-#import "ASMWithingUser.h"
+#import "ASMWithingsUser.h"
 
-@implementation ASMWithingUser
+@implementation ASMWithingsUser
 
 - (NSString*)displayName
 {
