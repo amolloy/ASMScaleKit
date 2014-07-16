@@ -122,10 +122,6 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 
 	__weak typeof(self) wself = self;
 	dispatch_async(dispatch_get_main_queue(), ^{
-		NSLog(@"Authentication");
-		NSLog(@"--------------");
-		NSLog(@"%@", urlComponents.URL);
-
 		ASMOAuth1AuthenticationViewController* vc = [[ASMOAuth1AuthenticationViewController alloc]
 													 initWithAuthorizationURL:urlComponents.URL
 													 sentinelURL:[NSURL URLWithString:kASMOAuth1CallbackURLString]
@@ -271,18 +267,8 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 
 		NSURLRequest* request = [self requestWithOAuthParametersFromURLRequest:mutableRequest];
 
-		NSLog(@"Acquire Access Token");
-		NSLog(@"--------------------");
-		NSLog(@"%@", request);
-
 		NSURLSession* session = [NSURLSession sharedSession];
 		[[session dataTaskWithRequest:request completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
-			NSLog(@"--------");
-			NSLog(@"Response");
-			NSLog(@"--------");
-			NSLog(@"%@", [[NSString alloc] initWithData:data encoding:self.stringEncoding]);
-			NSLog(@"");
-
 			ASMOAuth1Token* accessToken = nil;
 			if (!error)
 			{
@@ -350,18 +336,8 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 	NSURLRequest* request = [self requestWithOAuthParametersFromURLRequest:mutableRequest
 															   callbackURL:[NSURL URLWithString:kASMOAuth1CallbackURLString]];
 
-	NSLog(@"Acquire Request Token");
-	NSLog(@"---------------------");
-	NSLog(@"%@", request);
-
 	NSURLSession* session = [NSURLSession sharedSession];
 	[[session dataTaskWithRequest:request completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
-		NSLog(@"--------");
-		NSLog(@"Response");
-		NSLog(@"--------");
-		NSLog(@"%@", [[NSString alloc] initWithData:data encoding:self.stringEncoding]);
-		NSLog(@"");
-
 		ASMOAuth1Token* accessToken = nil;
 
 		if (!error)

@@ -52,8 +52,6 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 	NSString* userId = userInfo[@"userid"];
 	if (userId)
 	{
-		NSLog(@"User: %@", userId);
-
 		NSURLComponents* components = [NSURLComponents componentsWithURL:[self.client.baseURL URLByAppendingPathComponent:@"user"]
 												 resolvingAgainstBaseURL:NO];
 		components.query = [NSString stringWithFormat:@"action=getbyuserid&userid=%@", userId];
@@ -61,20 +59,9 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 		NSURLRequest* request = [NSURLRequest requestWithURL:components.URL];
 		request = [self.client requestWithOAuthParametersFromURLRequest:request];
 
-		NSLog(@"Request User Info");
-		NSLog(@"-----------------");
-		NSLog(@"%@", request);
-
 		NSURLSession* session = [NSURLSession sharedSession];
 		[[session dataTaskWithRequest:request
 					completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-
-						NSLog(@"--------");
-						NSLog(@"Response");
-						NSLog(@"--------");
-						NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-						NSLog(@"");
-
 						if (error)
 						{
 							NSLog(@"Error getting user info: %@", error);
