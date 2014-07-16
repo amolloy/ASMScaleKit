@@ -200,13 +200,13 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 		[self acquireOAuthAccessTokenWithPath:accessTokenPath
 								 requestToken:requestToken
 								 accessMethod:accessMethod
-								   completion:^(ASMOAuth1Token* accessToken, id responseObject, NSError* error)
+								   completion:^(ASMOAuth1Token* accessToken, id responseObject, NSError* aatError)
 		 {
 			 @strongify(self);
 			 self.accessToken = accessToken;
 			 if (self.authorizationCompletion)
 			 {
-				 self.authorizationCompletion(accessToken, error);
+				 self.authorizationCompletion(accessToken, aatError);
 			 }
 		 }];
 	}
