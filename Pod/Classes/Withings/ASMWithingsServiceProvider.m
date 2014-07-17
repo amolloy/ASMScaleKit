@@ -10,6 +10,7 @@
 #import "ASMOAuth1Client.h"
 #import "ASMOAuth1Token.h"
 #import "ASMWithingsUser.h"
+#import "ASMScaleKitMeasurement.h"
 #import <libextobjc/EXTScope.h>
 
 @interface ASMWithingsServiceProvider ()
@@ -246,6 +247,95 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 	 }];
 }
 
+- (NSArray*)measurementsFromJSONDictionary:(NSDictionary*)json
+									 error:(NSError*__autoreleasing*)outError
+{
+	NSError* error = nil;
+	NSInteger status = -1;
+	if (json[@"status"] && [json[@"status"] isKindOfClass:[NSNumber class]])
+	{
+		NSNumber* statusNumber = json[@"status"];
+		status = [statusNumber integerValue];
+	}
+
+	NSMutableArray* measurements = [NSMutableArray array];
+	// All of Withings (current) status codes are >= 0
+	if (-1 == status)
+	{
+		error = [NSError errorWithDomain:@"com.amolloy.asmwithingsserviceprovider"
+									code:-1
+								userInfo:@{NSLocalizedDescriptionKey:@"Unexpected response"}];
+	}
+	else if (0 != status)
+	{
+		// TODO They do list their status codes, probably should translate them here
+		error = [NSError errorWithDomain:@"com.amolloy.asmwithingsserviceprovider"
+									code:[json[@"status"] integerValue]
+								userInfo:@{NSLocalizedDescriptionKey:@"Error from Withings"}];
+	}
+	else
+	{
+		NSDictionary* body = json[@"body"];
+		if (!body)
+		{
+			error = [NSError errorWithDomain:@"com.amolloy.asmwithingsserviceprovider"
+										code:-1
+									userInfo:@{NSLocalizedDescriptionKey:@"Unexpected response, no body"}];
+		}
+		else
+		{
+			NSArray* measureGroups = body[@"measuregrps"];
+			if (!measureGroups)
+			{
+				error = [NSError errorWithDomain:@"com.amolloy.asmwithingsserviceprovider"
+											code:-1
+										userInfo:@{NSLocalizedDescriptionKey:@"Unexpected response, no measurement groups"}];
+			}
+			else
+			{
+				[measureGroups enumerateObjectsUsingBlock:^(NSDictionary* group, NSUInteger grpIdx, BOOL* grpsStop) {
+					NSArray* measures = group[@"measures"];
+					__block NSDecimalNumber* measure = nil;
+					[measures enumerateObjectsUsingBlock:^(NSDictionary* m, NSUInteger measureIdx, BOOL* measuresStop) {
+						if ([m[@"type"] integerValue] == 1) // type 1 = Weight in Kg
+						{
+							NSUInteger value = [m[@"value"] unsignedIntegerValue];
+							short unit = [m[@"unit"] shortValue];
+
+							measure = [NSDecimalNumber decimalNumberWithMantissa:value
+																		exponent:unit
+																	  isNegative:NO];
+							if (measure)
+							{
+								*measuresStop = YES;
+							}
+						}
+					}];
+
+					if (measure)
+					{
+						NSString* grpId = [group[@"grpid"] stringValue];
+						NSDate* date = [NSDate dateWithTimeIntervalSince1970:[group[@"date"] doubleValue]];
+
+						ASMScaleKitMeasurement* skmeasure = [[ASMScaleKitMeasurement alloc] initWithDate:date
+																							  weightInKg:measure
+																								uniqueId:grpId];
+
+						[measurements addObject:skmeasure];
+					}
+				}];
+			}
+		}
+	}
+
+	if (outError)
+	{
+		*outError = error;
+	}
+
+	return measurements.copy;
+}
+
 - (void)getEntriesForUser:(id<ASMScaleUser>)inUser
 				 fromDate:(NSDate*)startDate
 				   toDate:(NSDate*)endDate
@@ -301,10 +391,13 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 	request = [self.client requestWithOAuthParametersFromURLRequest:request
 														accessToken:user.accessToken];
 
+	@weakify(self);
 	NSURLSession* session = [NSURLSession sharedSession];
 	[[session dataTaskWithRequest:request
 				completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+					@strongify(self);
 					NSError* outError = nil;
+					NSArray* measurements = nil;
 					if (!error)
 					{
 						NSString* responseString = [[NSString alloc] initWithData:data
@@ -314,7 +407,13 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 																					 options:0
 																					   error:&outError];
 
-						NSLog(@"%@", responseDict);
+						measurements = [self measurementsFromJSONDictionary:responseDict
+										error:&outError];
+					}
+
+					if (completion)
+					{
+						completion(measurements, outError);
 					}
 				}] resume];
 }
