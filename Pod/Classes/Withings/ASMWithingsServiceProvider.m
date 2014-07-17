@@ -73,7 +73,7 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 									code:-1
 								userInfo:@{NSLocalizedDescriptionKey:@"Unexpected response"}];
 	}
-	else if (![json[@"status"] isEqualToString:@"0"])
+	else if ([json[@"status"] compare:@(0)] != NSOrderedSame)
 	{
 		// TODO They do list their status codes, probably should translate them here
 		error = [NSError errorWithDomain:@"com.amolloy.asmwithingsserviceprovider"
@@ -162,7 +162,12 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 
 						if (self.authenticationCompletionHandler)
 						{
-							self.authenticationCompletionHandler(@[user], outError);
+							NSArray* users = nil;
+							if (user)
+							{
+								users = @[user];
+							}
+							self.authenticationCompletionHandler(users, outError);
 						}
 					}] resume];
 	}
