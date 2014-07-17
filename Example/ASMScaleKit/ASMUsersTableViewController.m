@@ -42,7 +42,7 @@
 	NSArray* plistUsers = [[NSUserDefaults standardUserDefaults] arrayForKey:[self usersKey]];
 	__block NSMutableArray* users = [NSMutableArray arrayWithCapacity:plistUsers.count];
 
-	[users enumerateObjectsUsingBlock:^(NSData* userData, NSUInteger idx, BOOL *stop) {
+	[plistUsers enumerateObjectsUsingBlock:^(NSData* userData, NSUInteger idx, BOOL *stop) {
 		id<ASMScaleUser> user = [NSKeyedUnarchiver unarchiveObjectWithData:userData];
 		if (user)
 		{
@@ -50,6 +50,8 @@
 			[users addObject:user];
 		}
 	}];
+
+	self.users = users.copy;
 }
 
 - (IBAction)addUser:(id)sender
