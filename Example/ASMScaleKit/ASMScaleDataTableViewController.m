@@ -10,9 +10,12 @@
 #import <ASMScaleKit/ASMScaleManager.h>
 #import <ASMScaleKit/ASMScaleUser.h>
 #import <ASMScaleKit/ASMScaleServiceProvider.h>
+#import <ASMScaleKit/ASMScaleKitMeasurement.h>
 
 @interface ASMScaleDataTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) NSArray* measurements;
+@property (nonatomic, strong) NSDateFormatter* dateFormatter;
+@property (nonatomic, strong) NSNumberFormatter* weightFormatter;
 @end
 
 @implementation ASMScaleDataTableViewController
@@ -20,6 +23,13 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
+
+	self.dateFormatter = [[NSDateFormatter alloc] init];
+	self.dateFormatter.timeStyle = NSDateFormatterNoStyle;
+	self.dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+
+	self.weightFormatter = [[NSNumberFormatter alloc] init];
+	self.weightFormatter.maximumFractionDigits = 2;
 
 	[self.refreshControl beginRefreshing];
 	[self reloadData];
@@ -73,14 +83,10 @@
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MeasurementCell" forIndexPath:indexPath];
 
-	/*
-	HKQuantity* quant = self.measurements[indexPath.row];
+	ASMScaleKitMeasurement* measurement = self.measurements[indexPath.row];
 
-	id<ASMScaleUser> user = self.users[indexPath.row];
-
-	cell.textLabel.text = [user displayName];
-	cell.detailTextLabel.text = [user authenticated] ? @"Authenticated" : @"Not Authenticated";
-	 */
+	cell.textLabel.text = [self.dateFormatter stringFromDate:measurement.date];
+	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ kg", [self.weightFormatter stringFromNumber:measurement.weightInKg]];
 
     return cell;
 }
