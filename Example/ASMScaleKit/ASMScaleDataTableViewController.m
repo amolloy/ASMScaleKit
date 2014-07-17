@@ -7,9 +7,7 @@
 //
 
 #import "ASMScaleDataTableViewController.h"
-#import <ASMScaleKit/ASMScaleManager.h>
 #import <ASMScaleKit/ASMScaleUser.h>
-#import <ASMScaleKit/ASMScaleServiceProvider.h>
 #import <ASMScaleKit/ASMScaleKitMeasurement.h>
 
 @interface ASMScaleDataTableViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -48,19 +46,16 @@
 
 - (void)reloadData
 {
-	id<ASMScaleServiceProvider> provider = [[ASMScaleManager sharedManager] serviceProviderForUser:self.user];
-
-	[provider getEntriesForUser:self.user
-					   fromDate:nil
-						 toDate:nil
-					 lastUpdate:nil
-						  limit:nil
-						 offset:nil
-					 completion:^(NSArray *entries, NSError *error) {
-						 self.measurements = entries;
-						 [self.tableView reloadData];
-						 [self.refreshControl endRefreshing];
-					 }];
+	[self.user getEntriesFromDate:nil
+						   toDate:nil
+					   lastUpdate:nil
+							limit:nil
+						   offset:nil
+					   completion:^(NSArray *entries, NSError *error) {
+						   self.measurements = entries;
+						   [self.tableView reloadData];
+						   [self.refreshControl endRefreshing];
+					   }];
 }
 
 - (IBAction)logout:(id)sender
