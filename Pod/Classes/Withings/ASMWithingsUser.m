@@ -12,7 +12,7 @@
 static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.";
 
 @interface ASMWithingsUser ()
-@property (nonatomic, assign, readwrite) NSString* userid;
+@property (nonatomic, copy, readwrite) NSString* userid;
 @property (nonatomic, strong, readwrite) ASMOAuth1Token* accessToken;
 @property (nonatomic, copy, readwrite) NSString* name;
 @end
