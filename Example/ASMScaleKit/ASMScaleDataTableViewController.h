@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <ASMScaleKit/ASMScaleServiceProvider.h>
+
+@protocol ASMScaleUser;
 
 @interface ASMScaleDataTableViewController : UITableViewController
+@property (nonatomic, strong) id<ASMScaleUser> user;
 @end

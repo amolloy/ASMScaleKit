@@ -8,6 +8,7 @@
 
 #import "ASMUsersTableViewController.h"
 #import "ASMScaleKit/ASMScaleUser.h"
+#import "ASMScaleDataTableViewController.h"
 
 @interface ASMUsersTableViewController ()
 @property (nonatomic, strong) NSArray* users;
@@ -106,6 +107,18 @@
 	cell.detailTextLabel.text = [user authenticated] ? @"Authenticated" : @"Not Authenticated";
 
     return cell;
+}
+
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+	if ([segue.identifier isEqualToString:@"ListMeasurements"])
+	{
+		ASMScaleDataTableViewController* dest = (ASMScaleDataTableViewController*)segue.destinationViewController;
+		NSIndexPath* indexPath = [self.tableView indexPathForSelectedRow];
+		dest.user = self.users[indexPath.row];
+	}
 }
 
 @end
