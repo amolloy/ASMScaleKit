@@ -84,7 +84,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="D0S-iA-r1Q">
-                        <barButtonItem key="leftBarButtonItem" systemItem="add" id="kU8-NF-ZTH">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="d6X-LM-xTH"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="kU8-NF-ZTH">
                             <connections>
                                 <action selector="addUser:" destination="0gc-zF-YZe" id="AIZ-5Z-CTG"/>
                             </connections>
