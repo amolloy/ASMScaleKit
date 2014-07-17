@@ -24,6 +24,7 @@
 		B4654BE71974BB150025CB56 /* ASMOAuth1ClientTestsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B4654BE61974BB150025CB56 /* ASMOAuth1ClientTestsSpec.m */; };
 		B4654BE919754FE10025CB56 /* WithingsKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4654BE819754FE10025CB56 /* WithingsKeys.plist */; };
 		B46960841977143B00ABB909 /* ASMServiceProvidersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B46960831977143B00ABB909 /* ASMServiceProvidersTableViewController.m */; };
+		B4C1751419780EE000234535 /* ASMUsersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C1751319780EE000234535 /* ASMUsersTableViewController.m */; };
 		D9DD13D0012C4FCEB1DEFD99 /* libPods-Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 45A25D76E5D14C23B1AFF527 /* libPods-Tests.a */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +68,8 @@
 		B4654BE819754FE10025CB56 /* WithingsKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = WithingsKeys.plist; sourceTree = "<group>"; };
 		B46960821977143B00ABB909 /* ASMServiceProvidersTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASMServiceProvidersTableViewController.h; sourceTree = "<group>"; };
 		B46960831977143B00ABB909 /* ASMServiceProvidersTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASMServiceProvidersTableViewController.m; sourceTree = "<group>"; };
+		B4C1751219780EE000234535 /* ASMUsersTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASMUsersTableViewController.h; sourceTree = "<group>"; };
+		B4C1751319780EE000234535 /* ASMUsersTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASMUsersTableViewController.m; sourceTree = "<group>"; };
 		DEAB457C860F496B92391BC7 /* Pods-Tests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.xcconfig"; path = "Pods/Pods-Tests.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -143,6 +146,8 @@
 				B4654BD81971B2280025CB56 /* ASMScaleDataTableViewController.m */,
 				B46960821977143B00ABB909 /* ASMServiceProvidersTableViewController.h */,
 				B46960831977143B00ABB909 /* ASMServiceProvidersTableViewController.m */,
+				B4C1751219780EE000234535 /* ASMUsersTableViewController.h */,
+				B4C1751319780EE000234535 /* ASMUsersTableViewController.m */,
 			);
 			path = ASMScaleKit;
 			sourceTree = "<group>";
@@ -356,6 +361,7 @@
 			files = (
 				6003F59E195388D20070C39A /* ASMAppDelegate.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
+				B4C1751419780EE000234535 /* ASMUsersTableViewController.m in Sources */,
 				B46960841977143B00ABB909 /* ASMServiceProvidersTableViewController.m in Sources */,
 				B4654BD91971B2280025CB56 /* ASMScaleDataTableViewController.m in Sources */,
 			);

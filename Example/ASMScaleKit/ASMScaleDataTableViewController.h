@@ -10,5 +10,4 @@
 #import <ASMScaleKit/ASMScaleServiceProvider.h>
 
 @interface ASMScaleDataTableViewController : UITableViewController
-@property (nonatomic, strong) id<ASMScaleServiceProvider> provider;
 @end

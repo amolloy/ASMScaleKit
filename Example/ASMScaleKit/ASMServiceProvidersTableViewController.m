@@ -7,7 +7,7 @@
 //
 
 #import "ASMServiceProvidersTableViewController.h"
-#import "ASMScaleDataTableViewController.h"
+#import "ASMUsersTableViewController.h"
 #import <ASMScaleKit/ASMScaleManager.h>
 #import <ASMScaleKit/ASMScaleServiceProvider.h>
 
@@ -46,7 +46,7 @@
 {
 	if ([segue.identifier isEqualToString:@"SelectServiceProvider"])
 	{
-		ASMScaleDataTableViewController* dest = (ASMScaleDataTableViewController*)segue.destinationViewController;
+		ASMUsersTableViewController* dest = (ASMUsersTableViewController*)segue.destinationViewController;
 		NSIndexPath* indexPath = [self.tableView indexPathForSelectedRow];
 		dest.provider = [[ASMScaleManager sharedManager] serviceProviders][indexPath.row];
 	}
