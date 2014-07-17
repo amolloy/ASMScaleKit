@@ -27,7 +27,7 @@
 
 - (BOOL)isExpired;
 
-- (void)storeInKeychainWithName:(NSString*)name error:(NSError*__autoreleasing*)outError;
+- (BOOL)storeInKeychainWithName:(NSString*)name error:(NSError*__autoreleasing*)outError;
 + (ASMOAuth1Token*)oauth1TokenFromKeychainItemName:(NSString*)name error:(NSError*__autoreleasing*)outError;
 
 @end

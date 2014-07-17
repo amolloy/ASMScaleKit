@@ -155,17 +155,31 @@
     return parameters;
 }
 
-- (void)storeInKeychainWithName:(NSString*)name error:(NSError*__autoreleasing*)outError
+- (BOOL)storeInKeychainWithName:(NSString*)name error:(NSError*__autoreleasing*)outError
 {
 	NSDictionary* passDict = [self jsonDictionary];
 	NSData* passData = [NSJSONSerialization dataWithJSONObject:passDict
 													   options:0
 														 error:outError];
 
+	BOOL stored = NO;
 	if (passData)
 	{
-		[[FXKeychain defaultKeychain] setObject:passData forKey:name];
+		stored = [[FXKeychain defaultKeychain] setObject:passData forKey:name];
+		if (!stored)
+		{
+			// Would really like it if FXKeychain would pass out the error which caused it to fail instead of logging.
+			// Probably going to re-evaluate using FXKeychain.
+			if (outError)
+			{
+				// TODO
+				*outError = [NSError errorWithDomain:@"com.amolloy.asmoauth1token."
+												code:-1
+											userInfo:@{}];
+			}
+		}
 	}
+	return stored;
 }
 
 + (ASMOAuth1Token*)oauth1TokenFromKeychainItemName:(NSString*)name error:(NSError*__autoreleasing*)outError
