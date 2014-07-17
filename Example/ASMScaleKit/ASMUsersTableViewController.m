@@ -103,6 +103,7 @@
 	id<ASMScaleUser> user = self.users[indexPath.row];
 
 	cell.textLabel.text = [user displayName];
+	cell.detailTextLabel.text = [user authenticated] ? @"Authenticated" : @"Not Authenticated";
 
     return cell;
 }
