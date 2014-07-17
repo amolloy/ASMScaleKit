@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ASMOAuth1Token : NSObject
+@interface ASMOAuth1Token : NSObject <NSSecureCoding>
 @property (nonatomic, copy, readonly) NSString* key;
 @property (nonatomic, copy, readonly) NSString* secret;
 @property (nonatomic, copy, readonly) NSString* session;
@@ -26,4 +26,8 @@
         renewable:(BOOL)canBeRenewed;
 
 - (BOOL)isExpired;
+
+- (void)storeInKeychainWithName:(NSString*)name error:(NSError*__autoreleasing*)outError;
++ (ASMOAuth1Token*)oauth1TokenFromKeychainItemName:(NSString*)name error:(NSError*__autoreleasing*)outError;
+
 @end

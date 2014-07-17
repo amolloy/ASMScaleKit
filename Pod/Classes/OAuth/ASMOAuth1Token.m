@@ -87,6 +87,36 @@
     return self;
 }
 
+- (id)initWithJSONDictionary:(NSDictionary*)jsonDict
+{
+	self = [super init];
+	if (self)
+	{
+		self.key = jsonDict[@"key"];
+		self.secret = jsonDict[@"secret"];
+		self.session = jsonDict[@"session"];
+		self.expiration = jsonDict[@"expiration"];
+		self.renewable = [jsonDict[@"renewable"] boolValue];
+		self.userInfo = jsonDict[@"userInfo"];
+		self.verifier = jsonDict[@"verifier"];
+	}
+	return self;
+}
+
+- (NSDictionary*)jsonDictionary
+{
+	NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+	if (self.key) dict[@"key"] = self.key;
+	if (self.secret) dict[@"secret"] = self.secret;
+	if (self.session) dict[@"session"] = self.session;
+	if (self.expiration) dict[@"expiration"] = self.expiration;
+	dict[@"renewable"] = @(self.renewable);
+	if (self.userInfo) dict[@"userInfo"] = self.userInfo;
+	if (self.verifier) dict[@"verifier"] = self.verifier;
+
+	return dict.copy;
+}
+
 - (BOOL)isExpired
 {
     return [self.expiration compare:[NSDate date]] == NSOrderedAscending;
@@ -123,4 +153,72 @@
 
     return parameters;
 }
+
+- (void)storeInKeychainWithName:(NSString*)name error:(NSError*__autoreleasing*)outError
+{
+	NSDictionary* passDict = [self jsonDictionary];
+	NSData* passData = [NSJSONSerialization dataWithJSONObject:passDict
+													   options:0
+														 error:outError];
+
+	if (passData)
+	{
+		NSError* existError = nil;
+		ASMOAuth1Token* exists = [[self class] oauth1TokenFromKeychainItemName:name
+																		 error:&existError];
+		if (!existError)
+		{
+			NSDictionary* query = @{(__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+									(__bridge id)kSecAttrGeneric: name,
+									(__bridge id)kSecAttrAccount: name,
+									(__bridge id)kSecReturnAttributes: (__bridge id) kCFBooleanTrue};
+			if (exists)
+			{
+				// Update
+			}
+			else
+			{
+				// Store
+			}
+		}
+		else if (outError)
+		{
+			*outError = existError;
+		}
+	}
+}
+
++ (ASMOAuth1Token*)oauth1TokenFromKeychainItemName:(NSString*)name error:(NSError*__autoreleasing*)outError
+{
+	ASMOAuth1Token* result = nil;
+
+	NSDictionary* query = @{(__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+							(__bridge id)kSecAttrGeneric: name,
+							(__bridge id)kSecAttrAccount: name,
+							(__bridge id)kSecMatchLimit: (__bridge id) kSecMatchLimitOne,
+							(__bridge id)kSecReturnAttributes: (__bridge id) kCFBooleanTrue};
+
+	CFTypeRef attributes = NULL;
+    if (SecItemCopyMatching((__bridge CFDictionaryRef) query, &attributes) == errSecSuccess)
+	{
+		NSData* passData = (__bridge_transfer NSData*)attributes;
+
+		NSError* err = nil;
+		NSDictionary* passDict = [NSJSONSerialization JSONObjectWithData:passData
+																 options:0
+																   error:&err];
+		if (passDict)
+		{
+			result = [[self alloc] initWithJSONDictionary:passDict];
+		}
+		else if (outError)
+		{
+			*outError = err;
+		}
+	}
+
+	return result;
+}
+
+
 @end
