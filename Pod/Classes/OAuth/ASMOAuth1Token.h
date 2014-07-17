@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ASMOAuth1Token : NSObject <NSSecureCoding>
+@interface ASMOAuth1Token : NSObject
 @property (nonatomic, copy, readonly) NSString* key;
 @property (nonatomic, copy, readonly) NSString* secret;
 @property (nonatomic, copy, readonly) NSString* session;

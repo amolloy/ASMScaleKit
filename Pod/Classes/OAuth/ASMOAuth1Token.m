@@ -7,6 +7,7 @@
 //
 
 #import "ASMOAuth1Token.h"
+#import <FXKeychain/FXKeychain.h>
 
 @interface ASMOAuth1Token ()
 @property (nonatomic, copy, readwrite) NSString* key;
@@ -163,28 +164,7 @@
 
 	if (passData)
 	{
-		NSError* existError = nil;
-		ASMOAuth1Token* exists = [[self class] oauth1TokenFromKeychainItemName:name
-																		 error:&existError];
-		if (!existError)
-		{
-			NSDictionary* query = @{(__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
-									(__bridge id)kSecAttrGeneric: name,
-									(__bridge id)kSecAttrAccount: name,
-									(__bridge id)kSecReturnAttributes: (__bridge id) kCFBooleanTrue};
-			if (exists)
-			{
-				// Update
-			}
-			else
-			{
-				// Store
-			}
-		}
-		else if (outError)
-		{
-			*outError = existError;
-		}
+		[[FXKeychain defaultKeychain] setObject:passData forKey:name];
 	}
 }
 
@@ -192,29 +172,19 @@
 {
 	ASMOAuth1Token* result = nil;
 
-	NSDictionary* query = @{(__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
-							(__bridge id)kSecAttrGeneric: name,
-							(__bridge id)kSecAttrAccount: name,
-							(__bridge id)kSecMatchLimit: (__bridge id) kSecMatchLimitOne,
-							(__bridge id)kSecReturnAttributes: (__bridge id) kCFBooleanTrue};
+	NSData* passData = [[FXKeychain defaultKeychain] objectForKey:name];
 
-	CFTypeRef attributes = NULL;
-    if (SecItemCopyMatching((__bridge CFDictionaryRef) query, &attributes) == errSecSuccess)
+	NSError* err = nil;
+	NSDictionary* passDict = [NSJSONSerialization JSONObjectWithData:passData
+															 options:0
+															   error:&err];
+	if (passDict)
 	{
-		NSData* passData = (__bridge_transfer NSData*)attributes;
-
-		NSError* err = nil;
-		NSDictionary* passDict = [NSJSONSerialization JSONObjectWithData:passData
-																 options:0
-																   error:&err];
-		if (passDict)
-		{
-			result = [[self alloc] initWithJSONDictionary:passDict];
-		}
-		else if (outError)
-		{
-			*outError = err;
-		}
+		result = [[self alloc] initWithJSONDictionary:passDict];
+	}
+	else if (outError)
+	{
+		*outError = err;
 	}
 
 	return result;
