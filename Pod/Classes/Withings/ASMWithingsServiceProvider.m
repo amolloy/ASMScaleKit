@@ -32,6 +32,14 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 	{
 		self.oauthKey = key;
 		self.oauthSecret = secret;
+
+		NSURL* oauthURLBase = [NSURL URLWithString:kWithingsAuthBaseURLString];
+
+		self.client = [[ASMOAuth1Client alloc] initWithOAuthURLBase:oauthURLBase
+																key:self.oauthKey
+															 secret:self.oauthSecret];
+		self.client.protocolParameterLocation = ASMOAuth1ProtocolParameterURLQueryLocation;
+		self.client.providerHints = ASMOAuth1ClientWithingsProviderHints;
 	}
 	return self;
 }
@@ -212,14 +220,6 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 						withCompletion:(ASMScaleServiceProviderAuthenticationHandler)completion
 {
 	self.authenticationCompletionHandler = completion;
-
-	NSURL* oauthURLBase = [NSURL URLWithString:kWithingsAuthBaseURLString];
-
-	self.client = [[ASMOAuth1Client alloc] initWithOAuthURLBase:oauthURLBase
-													   key:self.oauthKey
-													secret:self.oauthSecret];
-	self.client.protocolParameterLocation = ASMOAuth1ProtocolParameterURLQueryLocation;
-	self.client.providerHints = ASMOAuth1ClientWithingsProviderHints;
 
 	@weakify(self);
 	[self.client authorizeWithRequestTokenPath:@"account/request_token"
