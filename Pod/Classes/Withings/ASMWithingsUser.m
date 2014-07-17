@@ -21,7 +21,7 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 
 - (NSString*)displayName
 {
-	return @"";
+	return self.name;
 }
 
 - (instancetype)initWithUserId:(NSString*)userid
