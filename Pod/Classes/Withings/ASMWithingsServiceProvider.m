@@ -67,13 +67,22 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 	// have out errors, though...
 	NSError* error = nil;
 	ASMWithingsUser* user = nil;
-	if (!json[@"status"])
+
+	NSInteger status = -1;
+	if (json[@"status"] && [json[@"status"] isKindOfClass:[NSNumber class]])
+	{
+		NSNumber* statusNumber = json[@"status"];
+		status = [statusNumber integerValue];
+	}
+
+	// All of Withings (current) status codes are >= 0
+	if (-1 == status)
 	{
 		error = [NSError errorWithDomain:@"com.amolloy.asmwithingsserviceprovider"
 									code:-1
 								userInfo:@{NSLocalizedDescriptionKey:@"Unexpected response"}];
 	}
-	else if ([json[@"status"] compare:@(0)] != NSOrderedSame)
+	else if (0 != status)
 	{
 		// TODO They do list their status codes, probably should translate them here
 		error = [NSError errorWithDomain:@"com.amolloy.asmwithingsserviceprovider"
@@ -91,27 +100,44 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 		}
 		else
 		{
-			NSString* name = @"";
-			if (body[@"firstname"])
+			NSArray* users = body[@"users"];
+			if (!users)
 			{
-				name = body[@"firstname"];
+				error = [NSError errorWithDomain:@"com.amolloy.asmwithingsserviceprovider"
+											code:-1
+										userInfo:@{NSLocalizedDescriptionKey:@"Unexpected response, no users"}];
 			}
-			if (body[@"lastname"])
+			else if (users.count == 0)
 			{
-				if (name.length != 0)
+				error = [NSError errorWithDomain:@"com.amolloy.asmwithingsserviceprovider"
+											code:-1
+										userInfo:@{NSLocalizedDescriptionKey:@"Unexpected response, users array empty"}];
+			}
+			else
+			{
+				NSDictionary* userDict = users[0];
+				NSString* name = @"";
+				if (userDict[@"firstname"])
 				{
-					name = [name stringByAppendingString:@" "];
+					name = userDict[@"firstname"];
 				}
-				name = [name stringByAppendingString:body[@"lastname"]];
-			}
-			if (name.length == 0)
-			{
-				name = userid;
-			}
+				if (userDict[@"lastname"])
+				{
+					if (name.length != 0)
+					{
+						name = [name stringByAppendingString:@" "];
+					}
+					name = [name stringByAppendingString:userDict[@"lastname"]];
+				}
+				if (name.length == 0)
+				{
+					name = userid;
+				}
 
-			user = [[ASMWithingsUser alloc] initWithUserId:userid
-									  permenantAccessToken:accessToken
-													  name:name];
+				user = [[ASMWithingsUser alloc] initWithUserId:userid
+										  permenantAccessToken:accessToken
+														  name:name];
+			}
 		}
 	}
 
@@ -128,7 +154,9 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 	NSString* userId = userInfo[@"userid"];
 	if (userId)
 	{
-		NSURLComponents* components = [NSURLComponents componentsWithString:[kWithingsBaseURLString stringByAppendingPathComponent:@"user"]];
+		NSURL* baseURL = [NSURL URLWithString:kWithingsBaseURLString];
+		NSURLComponents* components = [NSURLComponents componentsWithURL:[baseURL URLByAppendingPathComponent:@"user"]
+									   resolvingAgainstBaseURL:NO];
 		components.query = [NSString stringWithFormat:@"action=getbyuserid&userid=%@", userId];
 
 		NSURLRequest* request = [NSURLRequest requestWithURL:components.URL];
