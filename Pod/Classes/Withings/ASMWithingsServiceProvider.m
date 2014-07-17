@@ -168,7 +168,8 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 		components.query = [NSString stringWithFormat:@"action=getbyuserid&userid=%@", userId];
 
 		NSURLRequest* request = [NSURLRequest requestWithURL:components.URL];
-		request = [self.client requestWithOAuthParametersFromURLRequest:request];
+		request = [self.client requestWithOAuthParametersFromURLRequest:request
+															accessToken:accessToken];
 
 		NSURLSession* session = [NSURLSession sharedSession];
 		[[session dataTaskWithRequest:request
