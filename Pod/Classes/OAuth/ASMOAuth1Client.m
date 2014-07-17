@@ -118,7 +118,8 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 	if (self.providerHints & ASMOAuth1ClientIncludeFullOAuthParametersInAuthenticationHint)
 	{
 		NSURLRequest* request = [NSURLRequest requestWithURL:urlComponents.URL];
-		request = [self requestWithOAuthParametersFromURLRequest:request];
+		request = [self requestWithOAuthParametersFromURLRequest:request
+													 accessToken:self.accessToken];
 
 		urlComponents = [NSURLComponents componentsWithURL:request.URL
 								   resolvingAgainstBaseURL:NO];
@@ -269,7 +270,8 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 		[mutableRequest setHTTPMethod:[NSString stringWithOAuth1ClientAccessMethod:accessMethod]];
 		[mutableRequest setHTTPBody:nil];
 
-		NSURLRequest* request = [self requestWithOAuthParametersFromURLRequest:mutableRequest];
+		NSURLRequest* request = [self requestWithOAuthParametersFromURLRequest:mutableRequest
+																   accessToken:self.accessToken];
 
 		NSURLSession* session = [NSURLSession sharedSession];
 		[[session dataTaskWithRequest:request completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
@@ -338,6 +340,7 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 	[mutableRequest setHTTPMethod:[NSString stringWithOAuth1ClientAccessMethod:accessMethod]];
 	[mutableRequest setHTTPBody:nil];
 	NSURLRequest* request = [self requestWithOAuthParametersFromURLRequest:mutableRequest
+															   accessToken:self.accessToken
 															   callbackURL:[NSURL URLWithString:kASMOAuth1CallbackURLString]];
 
 	NSURLSession* session = [NSURLSession sharedSession];
@@ -367,12 +370,15 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 }
 
 - (NSURLRequest*)requestWithOAuthParametersFromURLRequest:(NSURLRequest*)request
+											  accessToken:(ASMOAuth1Token*)accessToken
 {
 	return [self requestWithOAuthParametersFromURLRequest:request
+											  accessToken:accessToken
 											  callbackURL:nil];
 }
 
 - (NSURLRequest*)requestWithOAuthParametersFromURLRequest:(NSURLRequest*)request
+											  accessToken:(ASMOAuth1Token*)accessToken
 											  callbackURL:(NSURL*)callbackURL
 {
 	NSAssert(ASMOAuth1ProtocolParameterURLQueryLocation == self.protocolParameterLocation, @"Not yet implemented");
@@ -387,10 +393,10 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 			[parameters addObject:[NSString stringWithFormat:@"oauth_callback=%@",
 										[[callbackURL absoluteString] stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()]]];
 		}
-		if (self.accessToken)
+		if (accessToken)
 		{
 			[parameters addObject:[NSString stringWithFormat:@"oauth_token=%@",
-										[self.accessToken.key stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()]]];
+										[accessToken.key stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()]]];
 		}
 		NSURLComponents* urlComponents = [NSURLComponents componentsWithURL:request.URL
 													resolvingAgainstBaseURL:NO];
@@ -404,7 +410,7 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 		NSString* signature = [self oauthSignatureForURLRequest:newRequest
 												queryParameters:parameters
 											 postBodyParameters:nil
-														  token:self.accessToken];
+														  token:accessToken];
 
 		[parameters addObject:[NSString stringWithFormat:@"oauth_signature=%@",
 							   [signature stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()]]];

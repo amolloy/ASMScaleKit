@@ -67,5 +67,6 @@ typedef void(^ASMOauth1ClientAuthorizeCompletion)(ASMOAuth1Token* token, NSError
 #endif
 						   completion:(ASMOauth1ClientAuthorizeCompletion)completion;
 
-- (NSURLRequest*)requestWithOAuthParametersFromURLRequest:(NSURLRequest*)request;
+- (NSURLRequest*)requestWithOAuthParametersFromURLRequest:(NSURLRequest*)request
+											  accessToken:(ASMOAuth1Token*)accessToken;
 @end
