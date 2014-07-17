@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/<GITHUB_USERNAME>/ASMScaleKit.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/amolloy'
 
-  s.platform     = :ios, '7.0', :osx, '10.8'
+  s.platform     = :ios, '7.0', :osx, '10.9'
   s.requires_arc = true
 
   s.source_files = 'Pod/Classes', 'Pod/Classes/OAuth'
@@ -34,7 +34,7 @@ Pod::Spec.new do |s|
 
   s.dependency 'libextobjc/EXTScope', '~> 0.4'
   s.dependency 'FXKeychain', '~>1.5.0'
-
+  
   s.subspec 'Withings' do |ws|
     ws.source_files = 'Pod/Classes/Withings'
     ws.public_header_files = 'Pod/Classes/Withings/*.h'
