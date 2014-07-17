@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class ASMScaleUser;
+@protocol ASMScaleUser;
 
 @protocol ASMScaleServiceProvider <NSObject>
 
@@ -63,7 +63,8 @@ typedef void(^ASMScaleServiceProviderAuthenticationHandler)(NSArray* users, NSEr
 /**
  *	Completion handler for retrieving the latest entries for a user from a service provider.
  *
- *	@param entries If the update succeded, contains a list of entries for the user.
+ *	@param entries If the update succeded, contains a list of entries for the user. The entries
+ *	will be stored as HKQuantity objects.
  *	@param error   If the update failed, a service-provider-specific error, nil otherwise.
  */
 typedef void(^ASMScaleServiceProviderUpdateEntriesHandler)(NSArray* entries, NSError* error);
@@ -72,9 +73,16 @@ typedef void(^ASMScaleServiceProviderUpdateEntriesHandler)(NSArray* entries, NSE
  *	Retrieves all of the entries for a user from the service provider after a specified date.
  *
  *	@param user       The user whose data is to be retrieved.
- *	@param date       The date to filter entries on. If specified, only entries after the given date 
- *	will be returned. Pass nil to retrieve all entries for the user regardless of date.
- *	@param completion Called upon completion of the update request. If the update succeeded, the 
+ *	@param startDate  The start date to filter entries on. If specified, only entries after the given date
+ *	will be returned. Pass nil to retrieve all entries for the user regardless of date (or however many the 
+ *	service provider will vend).
+ *	@param endDate    The end date to filter entries on. If specified, only entries before the given date
+ *  will be returned. Pass nil to retreive all entries for the user regardless of the end date (or however
+ *	many the service provider will vend).
+ *	@param lastUpdate This can be use to filter entries by when they were created or modified instead of 
+ *	their associated date. If this is supplied and the service provider supports it, only entries that
+ *  have been added or modified since this date will be returned.
+ *	@param completion Called upon completion of the update request. If the update succeeded, the
  *	entries array will contain all entries for the given user after the specified date. If an error 
  *	occurred, error will contain information about that error.
  *
@@ -82,6 +90,12 @@ typedef void(^ASMScaleServiceProviderUpdateEntriesHandler)(NSArray* entries, NSE
  *	request, it is up to the implementor of ASMScaleServiceProvider to batch the update requests.
  *	The completion handler should not be called until all entries have been retrieved.
  */
-- (void)getEntriesForUser:(ASMScaleUser*)user sinceDate:(NSDate*)date completion:(ASMScaleServiceProviderUpdateEntriesHandler)completion;
+- (void)getEntriesForUser:(id<ASMScaleUser>)user
+				 fromDate:(NSDate*)startDate
+				   toDate:(NSDate*)endDate
+			   lastUpdate:(NSDate*)lastUpdate
+					limit:(NSNumber*)limit
+				   offset:(NSNumber*)offset
+			   completion:(ASMScaleServiceProviderUpdateEntriesHandler)completion;
 
 @end

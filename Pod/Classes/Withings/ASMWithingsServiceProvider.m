@@ -246,8 +246,76 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 	 }];
 }
 
-- (void)getEntriesForUser:(ASMScaleUser*)user sinceDate:(NSDate*)date completion:(ASMScaleServiceProviderUpdateEntriesHandler)completion
+- (void)getEntriesForUser:(id<ASMScaleUser>)inUser
+				 fromDate:(NSDate*)startDate
+				   toDate:(NSDate*)endDate
+			   lastUpdate:(NSDate*)lastUpdate
+					limit:(NSNumber*)limit
+				   offset:(NSNumber*)offset
+			   completion:(ASMScaleServiceProviderUpdateEntriesHandler)completion
 {
+	ASMWithingsUser* user = (ASMWithingsUser*)inUser;
 
+	NSURL* baseURL = [NSURL URLWithString:kWithingsBaseURLString];
+	NSURLComponents* components = [NSURLComponents componentsWithURL:[baseURL URLByAppendingPathComponent:@"measure"]
+											 resolvingAgainstBaseURL:NO];
+
+	NSMutableDictionary* parameters = @{@"action": @"getmeas",
+										@"userid": user.userid,
+										@"meastype": @"1",
+										@"category": @"1"}.mutableCopy;
+
+	if (startDate)
+	{
+		parameters[@"startdate"] = [@([startDate timeIntervalSince1970]) stringValue];
+	}
+	if (endDate)
+	{
+		parameters[@"enddate"] = [@([endDate timeIntervalSince1970]) stringValue];
+	}
+	if (lastUpdate)
+	{
+		parameters[@"lastupdate"] = [@([lastUpdate timeIntervalSince1970]) stringValue];
+	}
+	if (limit)
+	{
+		parameters[@"limit"] = [limit stringValue];
+	}
+	if (offset)
+	{
+		parameters[@"offset"] = [offset stringValue];
+	}
+
+	NSMutableCharacterSet* allowedCharacters = [[NSCharacterSet alphanumericCharacterSet] mutableCopy];
+	[allowedCharacters addCharactersInString:@"-._~"];
+
+	NSMutableArray* kvPairs = [NSMutableArray arrayWithCapacity:parameters.count];
+	[parameters enumerateKeysAndObjectsUsingBlock:^(NSString* key, NSString* value, BOOL *stop) {
+		NSString* encodedValue = [value stringByAddingPercentEncodingWithAllowedCharacters:allowedCharacters];
+		[kvPairs addObject:[NSString stringWithFormat:@"%@=%@", key, encodedValue]];
+	}];
+
+	components.query = [kvPairs componentsJoinedByString:@"&"];
+
+	NSURLRequest* request = [NSURLRequest requestWithURL:components.URL];
+	request = [self.client requestWithOAuthParametersFromURLRequest:request
+														accessToken:user.accessToken];
+
+	NSURLSession* session = [NSURLSession sharedSession];
+	[[session dataTaskWithRequest:request
+				completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+					NSError* outError = nil;
+					if (!error)
+					{
+						NSString* responseString = [[NSString alloc] initWithData:data
+																		 encoding:NSUTF8StringEncoding];
+						NSData* responseData = [responseString dataUsingEncoding:NSUTF8StringEncoding];
+						NSDictionary* responseDict = [NSJSONSerialization JSONObjectWithData:responseData
+																					 options:0
+																					   error:&outError];
+
+						NSLog(@"%@", responseDict);
+					}
+				}] resume];
 }
 @end
