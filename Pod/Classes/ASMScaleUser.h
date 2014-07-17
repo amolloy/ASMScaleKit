@@ -21,4 +21,10 @@
  *	@return a string for this user appropriate for displaying in a user interface.
  */
 - (NSString*)displayName;
+
+- (BOOL)authenticated;
+
+- (BOOL)storeSensitiveInformationInKeychain:(NSError*__autoreleasing*)outError;
+- (BOOL)retrieveSensitiveInformationFromKeychain:(NSError*__autoreleasing*)outError;
+
 @end

@@ -12,9 +12,12 @@
 @class ASMOAuth1Token;
 
 @interface ASMWithingsUser : NSObject <ASMScaleUser>
-@property (nonatomic, assign, readonly) NSInteger userid;
+@property (nonatomic, assign, readonly) NSString* userid;
 @property (nonatomic, strong, readonly) ASMOAuth1Token* accessToken;
 @property (nonatomic, copy, readonly) NSString* name;
 
+- (instancetype)initWithUserId:(NSString*)userid
+		  permenantAccessToken:(ASMOAuth1Token*)token
+						  name:(NSString*)name;
 
 @end

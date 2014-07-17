@@ -7,6 +7,15 @@
 //
 
 #import "ASMWithingsUser.h"
+#import "ASMOAuth1Token.h"
+
+static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.";
+
+@interface ASMWithingsUser ()
+@property (nonatomic, assign, readwrite) NSString* userid;
+@property (nonatomic, strong, readwrite) ASMOAuth1Token* accessToken;
+@property (nonatomic, copy, readwrite) NSString* name;
+@end
 
 @implementation ASMWithingsUser
 
@@ -15,6 +24,46 @@
 	return @"";
 }
 
+- (instancetype)initWithUserId:(NSString*)userid
+		  permenantAccessToken:(ASMOAuth1Token*)token
+						  name:(NSString*)name
+{
+	self = [super init];
+	if (self)
+	{
+		self.userid = userid;
+		self.accessToken = token;
+		self.name = name;
+	}
+	return self;
+}
+
+- (BOOL)authenticated
+{
+	return self.accessToken && ![self.accessToken isExpired];
+}
+
+#pragma mark - Keychain
+- (NSString*)keychainName
+{
+	return [kWithingsUserKeychainPrefix stringByAppendingString:self.userid];
+}
+
+- (BOOL)storeSensitiveInformationInKeychain:(NSError*__autoreleasing*)outError
+{
+	return [self.accessToken storeInKeychainWithName:[self keychainName]
+											   error:outError];
+}
+
+- (BOOL)retrieveSensitiveInformationFromKeychain:(NSError*__autoreleasing*)outError
+{
+	self.accessToken = [ASMOAuth1Token oauth1TokenFromKeychainItemName:[self keychainName]
+																 error:outError];
+	return (self.accessToken != nil);
+}
+
+#pragma mark - NSSecureCoding
+
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
 	return nil;
@@ -22,6 +71,8 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
+	[aCoder encodeObject:self.userid forKey:@"userid"];
+	[aCoder encodeObject:self.name forKey:@"name"];
 }
 
 + (BOOL)supportsSecureCoding
