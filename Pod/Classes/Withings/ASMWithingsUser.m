@@ -64,12 +64,18 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 
 #pragma mark - NSSecureCoding
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (id)initWithCoder:(NSCoder*)aDecoder
 {
-	return nil;
+	self = [super init];
+	if (self)
+	{
+		self.userid = [aDecoder decodeObjectOfClass:[NSString class] forKey:@"userid"];
+		self.name = [aDecoder decodeObjectOfClass:[NSString class] forKey:@"name"];
+	}
+	return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)aCoder
+- (void)encodeWithCoder:(NSCoder*)aCoder
 {
 	[aCoder encodeObject:self.userid forKey:@"userid"];
 	[aCoder encodeObject:self.name forKey:@"name"];
