@@ -16,7 +16,6 @@
 @property (nonatomic, copy) NSString* oauthKey;
 @property (nonatomic, copy) NSString* oauthSecret;
 @property (nonatomic, copy) ASMScaleServiceProviderAuthenticationHandler authenticationCompletionHandler;
-@property (nonatomic, strong) ASMOAuth1Token* accessToken;
 @property (nonatomic, strong) ASMOAuth1Client* client;
 @end
 
@@ -59,9 +58,73 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 	return [ASMWithingsUser class];
 }
 
-- (void)lookupUserInformation
+- (ASMWithingsUser*)userWithUserID:(NSString*)userid
+					   accessToken:(ASMOAuth1Token*)accessToken
+				fromJSONDictionary:(NSDictionary*)json
+							 error:(NSError*__autoreleasing*)outError
 {
-	NSDictionary* userInfo = self.accessToken.userInfo;
+	// I wonder if this might be better as an initializer in ASMWithingsUser. Initializers don't typically
+	// have out errors, though...
+	NSError* error = nil;
+	ASMWithingsUser* user = nil;
+	if (!json[@"status"])
+	{
+		error = [NSError errorWithDomain:@"com.amolloy.asmwithingsserviceprovider"
+									code:-1
+								userInfo:@{NSLocalizedDescriptionKey:@"Unexpected response"}];
+	}
+	else if (![json[@"status"] isEqualToString:@"0"])
+	{
+		// TODO They do list their status codes, probably should translate them here
+		error = [NSError errorWithDomain:@"com.amolloy.asmwithingsserviceprovider"
+									code:[json[@"status"] integerValue]
+								userInfo:@{NSLocalizedDescriptionKey:@"Error from Withings"}];
+	}
+	else
+	{
+		NSDictionary* body = json[@"body"];
+		if (!body)
+		{
+			error = [NSError errorWithDomain:@"com.amolloy.asmwithingsserviceprovider"
+										code:-1
+									userInfo:@{NSLocalizedDescriptionKey:@"Unexpected response, no body"}];
+		}
+		else
+		{
+			NSString* name = @"";
+			if (body[@"firstname"])
+			{
+				name = body[@"firstname"];
+			}
+			if (body[@"lastname"])
+			{
+				if (name.length != 0)
+				{
+					name = [name stringByAppendingString:@" "];
+				}
+				name = [name stringByAppendingString:body[@"lastname"]];
+			}
+			if (name.length == 0)
+			{
+				name = userid;
+			}
+
+			user = [[ASMWithingsUser alloc] initWithUserId:userid
+									  permenantAccessToken:accessToken
+													  name:name];
+		}
+	}
+
+	if (outError)
+	{
+		*outError = error;
+	}
+	return user;
+}
+
+- (void)lookupUserInformationWithAccessToken:(ASMOAuth1Token*)accessToken
+{
+	NSDictionary* userInfo = accessToken.userInfo;
 	NSString* userId = userInfo[@"userid"];
 	if (userId)
 	{
@@ -74,19 +137,32 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 		NSURLSession* session = [NSURLSession sharedSession];
 		[[session dataTaskWithRequest:request
 					completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-						if (error)
-						{
-							NSLog(@"Error getting user info: %@", error);
-						}
-						else
+						NSError* outError = nil;
+						ASMWithingsUser* user = nil;
+						if (!error)
 						{
 							NSString* responseString = [[NSString alloc] initWithData:data
 																			 encoding:NSUTF8StringEncoding];
+							NSData* responseData = [responseString dataUsingEncoding:NSUTF8StringEncoding];
+							NSDictionary* responseDict = [NSJSONSerialization JSONObjectWithData:responseData
+																						 options:0
+																						   error:&outError];
+							if (responseDict)
+							{
+								user = [self userWithUserID:userId
+												accessToken:accessToken
+										 fromJSONDictionary:responseDict
+													  error:&outError];
+							}
+						}
+						else
+						{
+							outError = error;
+						}
 
-							NSLog(@"Response:");
-							NSLog(@"%@", response);
-							NSLog(@"Response string from data:");
-							NSLog(@"%@", responseString);
+						if (self.authenticationCompletionHandler)
+						{
+							self.authenticationCompletionHandler(@[user], outError);
 						}
 					}] resume];
 	}
@@ -131,8 +207,7 @@ static NSString* const kWithingsBaseURLString = @"http://wbsapi.withings.net";
 		 }
 		 else
 		 {
-			 self.accessToken = accessToken;
-			 [self lookupUserInformation];
+			 [self lookupUserInformationWithAccessToken:accessToken];
 		 }
 	 }];
 }
