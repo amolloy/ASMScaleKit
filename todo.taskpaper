@@ -5,6 +5,6 @@
 		- Standardize on capitization of userid @done
 	- Move API for retrieving measurements from ServiceProvider to User @done
 	- Make Provider/User classes @done
-	- Move ScaleManager into Provider as static methods
+	- Move ScaleManager into Provider as static methods @done
 	- Remove dependency on FXKeychain
 	- Fix table views in Example updating @done

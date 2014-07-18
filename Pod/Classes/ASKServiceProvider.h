@@ -47,4 +47,8 @@ typedef void(^ASMScaleServiceProviderAuthenticationHandler)(NSArray* users, NSEr
 - (void)authenticateFromViewController:(UIViewController*)viewController
 						withCompletion:(ASMScaleServiceProviderAuthenticationHandler)completion;
 
++ (void)registerServiceProvider:(ASKServiceProvider*)serviceProvider;
++ (NSArray*)serviceProviders;
++ (instancetype)serviceProviderForUser:(ASKUser*)user;
+
 @end

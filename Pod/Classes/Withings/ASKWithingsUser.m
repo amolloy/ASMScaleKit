@@ -11,7 +11,6 @@
 #import "ASKOAuth1Client.h"
 #import "ASKMeasurement.h"
 #import "ASKWithingsProvider.h"
-#import "ASKProviderManager.h"
 #import <libextobjc/EXTScope.h>
 
 static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.";
@@ -55,7 +54,7 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 					offset:(NSNumber*)offset
 				completion:(void(^)(NSArray* entries, NSError* error))completion
 {
-	ASKWithingsProvider* serviceProvider = (ASKWithingsProvider*)[[ASKProviderManager sharedManager] serviceProviderForUser:self];
+	ASKWithingsProvider* serviceProvider = [ASKWithingsProvider serviceProviderForUser:self];
 
 	NSURL* baseURL = [NSURL URLWithString:ASMWithingsBaseURLString];
 	NSURLComponents* components = [NSURLComponents componentsWithURL:[baseURL URLByAppendingPathComponent:@"measure"]

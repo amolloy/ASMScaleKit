@@ -8,7 +8,6 @@
 
 #import "ASMServiceProvidersTableViewController.h"
 #import "ASMUsersTableViewController.h"
-#import <ASMScaleKit/ASKProviderManager.h>
 #import <ASMScaleKit/ASKServiceProvider.h>
 
 @interface ASMServiceProvidersTableViewController ()
@@ -26,7 +25,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return [[ASKProviderManager sharedManager] serviceProviders].count;
+	return [ASKServiceProvider serviceProviders].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -34,7 +33,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ScaleServiceProviderCell"
 															forIndexPath:indexPath];
     
-	ASKServiceProvider* serviceProvider = [[ASKProviderManager sharedManager] serviceProviders][indexPath.row];
+	ASKServiceProvider* serviceProvider = [ASKServiceProvider serviceProviders][indexPath.row];
 	cell.textLabel.text = [serviceProvider displayName];
 
     return cell;
@@ -48,7 +47,7 @@
 	{
 		ASMUsersTableViewController* dest = (ASMUsersTableViewController*)segue.destinationViewController;
 		NSIndexPath* indexPath = [self.tableView indexPathForSelectedRow];
-		dest.provider = [[ASKProviderManager sharedManager] serviceProviders][indexPath.row];
+		dest.provider = [ASKServiceProvider serviceProviders][indexPath.row];
 	}
 }
 
