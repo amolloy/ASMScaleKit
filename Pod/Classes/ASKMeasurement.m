@@ -12,6 +12,9 @@
 @property (nonatomic, strong, readwrite) NSDate* date;
 @property (nonatomic, strong, readwrite) NSDecimalNumber* weightInKg;
 @property (nonatomic, strong, readwrite) NSString* uniqueId;
+#if ASKHealthKitAvailable
+@property (nonatomic, strong, readwrite) HKQuantity* weight;
+#endif
 @end
 
 @implementation ASKMeasurement
@@ -26,6 +29,14 @@
 		self.date = date;
 		self.weightInKg = weightInKg;
 		self.uniqueId = uniqueId;
+
+#if ASKHealthKitAvailable
+		if (NSClassFromString(@"HKQuantity"))
+		{
+			self.weight = [HKQuantity quantityWithUnit:[HKUnit gramUnitWithMetricPrefix:HKMetricPrefixKilo]
+										   doubleValue:[self.weightInKg doubleValue]];
+		}
+#endif
 	}
 	return self;
 }

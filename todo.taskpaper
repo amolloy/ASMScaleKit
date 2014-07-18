@@ -8,3 +8,5 @@
 	- Move ScaleManager into Provider as static methods @done
 	- Remove dependency on FXKeychain
 	- Fix table views in Example updating @done
+	- Vend HKQuantity where available @done
+	- 
