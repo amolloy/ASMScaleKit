@@ -6,17 +6,17 @@
 //
 //
 
-#import "ASMScaleManager.h"
-#import "ASMScaleServiceProvider.h"
-#import "ASMScaleUser.h"
+#import "ASKProviderManager.h"
+#import "ASKServiceProvider.h"
+#import "ASKUser.h"
 
-@interface ASMScaleManager ()
+@interface ASKProviderManager ()
 @property (nonatomic, strong) NSMutableArray* providers;
 @end
 
-@implementation ASMScaleManager
+@implementation ASKProviderManager
 
-- (void)registerServiceProvider:(id<ASMScaleServiceProvider>)serviceProvider
+- (void)registerServiceProvider:(id<ASKServiceProvider>)serviceProvider
 {
 	[self.providers addObject:serviceProvider];
 }
@@ -26,10 +26,10 @@
 	return self.providers.copy;
 }
 
-- (id<ASMScaleServiceProvider>)serviceProviderForUser:(id<ASMScaleUser>)user
+- (id<ASKServiceProvider>)serviceProviderForUser:(id<ASKUser>)user
 {
-	__block id<ASMScaleServiceProvider> provider = nil;
-	[self.providers enumerateObjectsUsingBlock:^(id<ASMScaleServiceProvider> obj, NSUInteger idx, BOOL *stop) {
+	__block id<ASKServiceProvider> provider = nil;
+	[self.providers enumerateObjectsUsingBlock:^(id<ASKServiceProvider> obj, NSUInteger idx, BOOL *stop) {
 		if ([user isKindOfClass:[obj userClass]])
 		{
 			provider = obj;
@@ -41,7 +41,7 @@
 
 #pragma mark - Singleton
 
-static ASMScaleManager *SINGLETON = nil;
+static ASKProviderManager *SINGLETON = nil;
 
 static bool isFirstAccess = YES;
 
@@ -77,12 +77,12 @@ static bool isFirstAccess = YES;
 
 - (id)copy
 {
-    return [[ASMScaleManager alloc] init];
+    return [[ASKProviderManager alloc] init];
 }
 
 - (id)mutableCopy
 {
-    return [[ASMScaleManager alloc] init];
+    return [[ASKProviderManager alloc] init];
 }
 
 - (id) init

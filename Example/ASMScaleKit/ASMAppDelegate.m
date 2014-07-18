@@ -7,8 +7,8 @@
 //
 
 #import "ASMAppDelegate.h"
-#import <ASMScaleKit/ASMScaleManager.h>
-#import <ASMScaleKit/ASMWithingsServiceProvider.h>
+#import <ASMScaleKit/ASKProviderManager.h>
+#import <ASMScaleKit/ASKWithingsProvider.h>
 
 @implementation ASMAppDelegate
 
@@ -16,8 +16,8 @@
 {
 	NSDictionary* keysDict = [NSDictionary dictionaryWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"WithingsKeys" withExtension:@"plist"]];
 
-	[[ASMScaleManager sharedManager] registerServiceProvider:
-	 [[ASMWithingsServiceProvider alloc] initWithOAuthKey:keysDict[@"key"]
+	[[ASKProviderManager sharedManager] registerServiceProvider:
+	 [[ASKWithingsProvider alloc] initWithOAuthKey:keysDict[@"key"]
 												   secret:keysDict[@"secret"]]];
 
 	return YES;

@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ASMScaleServiceProvider.h"
+#import "ASKServiceProvider.h"
 
 @interface ASMUsersTableViewController : UITableViewController
-@property (nonatomic, strong) id<ASMScaleServiceProvider> provider;
+@property (nonatomic, strong) id<ASKServiceProvider> provider;
 @end

@@ -7,8 +7,8 @@
 //
 
 #import "ASMScaleDataTableViewController.h"
-#import <ASMScaleKit/ASMScaleUser.h>
-#import <ASMScaleKit/ASMScaleKitMeasurement.h>
+#import <ASMScaleKit/ASKUser.h>
+#import <ASMScaleKit/ASKMeasurement.h>
 
 @interface ASMScaleDataTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) NSArray* measurements;
@@ -78,7 +78,7 @@
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MeasurementCell" forIndexPath:indexPath];
 
-	ASMScaleKitMeasurement* measurement = self.measurements[indexPath.row];
+	ASKMeasurement* measurement = self.measurements[indexPath.row];
 
 	cell.textLabel.text = [self.dateFormatter stringFromDate:measurement.date];
 	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ kg", [self.weightFormatter stringFromNumber:measurement.weightInKg]];

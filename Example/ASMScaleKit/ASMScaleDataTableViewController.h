@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol ASMScaleUser;
+@protocol ASKUser;
 
 @interface ASMScaleDataTableViewController : UITableViewController
-@property (nonatomic, strong) id<ASMScaleUser> user;
+@property (nonatomic, strong) id<ASKUser> user;
 @end

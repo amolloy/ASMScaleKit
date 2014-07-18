@@ -7,16 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <ASMScaleServiceProvider.h>
+#import <ASKServiceProvider.h>
 
-@class ASMOAuth1Client;
+@class ASKOAuth1Client;
 
-@interface ASMWithingsServiceProvider : NSObject <ASMScaleServiceProvider>
+@interface ASKWithingsProvider : NSObject <ASKServiceProvider>
 
 extern const NSInteger ASMWithingsServiceProviderNoUserID;
 extern NSString* const ASMWithingsBaseURLString;
 
-@property (nonatomic, strong, readonly) ASMOAuth1Client* client;
+@property (nonatomic, strong, readonly) ASKOAuth1Client* client;
 
 - (instancetype)initWithOAuthKey:(NSString*)key secret:(NSString*)secret;
 

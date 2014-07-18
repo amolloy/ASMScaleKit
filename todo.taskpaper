@@ -1,7 +1,7 @@
 0.1:
 	- Support for Withings scales @done
 	- Name cleanup / refactor
-		- Replace all ASM prefixes with ASK (A(SM)ScaleKit)
+		- Replace all ASM prefixes with ASK (A(SM)ScaleKit) @done
 		- Standardize on capitization of userid
 	- Move API for retrieving measurements from ServiceProvider to User @done
 	- 

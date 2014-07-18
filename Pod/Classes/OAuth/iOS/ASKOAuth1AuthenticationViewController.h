@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ASMOAuth1AuthenticationViewController : UIViewController
+@interface ASKOAuth1AuthenticationViewController : UIViewController
 
 typedef void(^ASMOAuth1AuthenticationCompletionHandler)(NSURL* authorizationURL, NSError* error);
 

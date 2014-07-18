@@ -7,17 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <ASMScaleKit/ASMScaleUser.h>
+#import <ASMScaleKit/ASKUser.h>
 
-@class ASMOAuth1Token;
+@class ASKOAuth1Token;
 
-@interface ASMWithingsUser : NSObject <ASMScaleUser>
+@interface ASKWithingsUser : NSObject <ASKUser>
 @property (nonatomic, copy, readonly) NSString* userid;
-@property (nonatomic, strong, readonly) ASMOAuth1Token* accessToken;
+@property (nonatomic, strong, readonly) ASKOAuth1Token* accessToken;
 @property (nonatomic, copy, readonly) NSString* name;
 
 - (instancetype)initWithUserId:(NSString*)userid
-		  permenantAccessToken:(ASMOAuth1Token*)token
+		  permenantAccessToken:(ASKOAuth1Token*)token
 						  name:(NSString*)name;
 
 @end

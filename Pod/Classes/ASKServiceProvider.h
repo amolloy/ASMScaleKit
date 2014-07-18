@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol ASMScaleUser;
+@protocol ASKUser;
 
-@protocol ASMScaleServiceProvider <NSObject>
+@protocol ASKServiceProvider <NSObject>
 
 /**
  *	Returns the logged in status for the service provider.

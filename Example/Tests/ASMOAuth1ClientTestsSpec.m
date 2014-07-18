@@ -1,5 +1,5 @@
 //
-//  ASMOAuth1ClientTestsSpec.m
+//  ASKOAuth1ClientTestsSpec.m
 //  ASMScaleKit
 //
 //  Created by Andrew Molloy on 7/14/14.
@@ -7,24 +7,24 @@
 //
 
 #import <Expecta/Expecta.h>
-#import <ASMSCaleKit/ASMOAuth1Client.h>
+#import <ASMSCaleKit/ASKOAuth1Client.h>
 
 // Yeah I know this is bad, but better than making a class category with a name like "fortesting"
 // just for one method.
-@interface ASMOAuth1Client ()
+@interface ASKOAuth1Client ()
 - (NSString*)HMACSHA1SignatureForURLRequest:(NSURLRequest*)request
 							queryParameters:(NSArray*)queryParameters
 						 postBodyParameters:(NSArray*)postBodyParameters
-									  token:(ASMOAuth1Token*)token;
+									  token:(ASKOAuth1Token*)token;
 @end
 
-SpecBegin(ASMOAuth1Client)
+SpecBegin(ASKOAuth1Client)
 
-describe(@"ASMOAuth1Client", ^{
+describe(@"ASKOAuth1Client", ^{
 	it(@"should calculate HMAC-SHA1 correctly",
 	   ^{
 		   NSURL* url = [NSURL URLWithString:@"https://oauth.withings.com"];
-		   ASMOAuth1Client* testClient = [[ASMOAuth1Client alloc] initWithOAuthURLBase:url
+		   ASKOAuth1Client* testClient = [[ASKOAuth1Client alloc] initWithOAuthURLBase:url
 																				   key:@"abcdef0123456789abcdef"
 																				secret:@"abcdef0123456789abcdef"];
 

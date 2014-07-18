@@ -6,23 +6,23 @@
 //
 //
 
-#import "ASMWithingsUser.h"
-#import "ASMOAuth1Token.h"
-#import "ASMOAuth1Client.h"
-#import "ASMScaleKitMeasurement.h"
-#import "ASMWithingsServiceProvider.h"
-#import "ASMScaleManager.h"
+#import "ASKWithingsUser.h"
+#import "ASKOAuth1Token.h"
+#import "ASKOAuth1Client.h"
+#import "ASKMeasurement.h"
+#import "ASKWithingsProvider.h"
+#import "ASKProviderManager.h"
 #import <libextobjc/EXTScope.h>
 
 static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.";
 
-@interface ASMWithingsUser ()
+@interface ASKWithingsUser ()
 @property (nonatomic, copy, readwrite) NSString* userid;
-@property (nonatomic, strong, readwrite) ASMOAuth1Token* accessToken;
+@property (nonatomic, strong, readwrite) ASKOAuth1Token* accessToken;
 @property (nonatomic, copy, readwrite) NSString* name;
 @end
 
-@implementation ASMWithingsUser
+@implementation ASKWithingsUser
 
 - (NSString*)displayName
 {
@@ -30,7 +30,7 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 }
 
 - (instancetype)initWithUserId:(NSString*)userid
-		  permenantAccessToken:(ASMOAuth1Token*)token
+		  permenantAccessToken:(ASKOAuth1Token*)token
 						  name:(NSString*)name
 {
 	self = [super init];
@@ -55,7 +55,7 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 					offset:(NSNumber*)offset
 				completion:(void(^)(NSArray* entries, NSError* error))completion
 {
-	ASMWithingsServiceProvider* serviceProvider = [[ASMScaleManager sharedManager] serviceProviderForUser:self];
+	ASKWithingsProvider* serviceProvider = [[ASKProviderManager sharedManager] serviceProviderForUser:self];
 
 	NSURL* baseURL = [NSURL URLWithString:ASMWithingsBaseURLString];
 	NSURLComponents* components = [NSURLComponents componentsWithURL:[baseURL URLByAppendingPathComponent:@"measure"]
@@ -199,7 +199,7 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 						NSString* grpId = [group[@"grpid"] stringValue];
 						NSDate* date = [NSDate dateWithTimeIntervalSince1970:[group[@"date"] doubleValue]];
 
-						ASMScaleKitMeasurement* skmeasure = [[ASMScaleKitMeasurement alloc] initWithDate:date
+						ASKMeasurement* skmeasure = [[ASKMeasurement alloc] initWithDate:date
 																							  weightInKg:measure
 																								uniqueId:grpId];
 
@@ -232,7 +232,7 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 
 - (BOOL)retrieveSensitiveInformationFromKeychain:(NSError*__autoreleasing*)outError
 {
-	self.accessToken = [ASMOAuth1Token oauth1TokenFromKeychainItemName:[self keychainName]
+	self.accessToken = [ASKOAuth1Token oauth1TokenFromKeychainItemName:[self keychainName]
 																 error:outError];
 	return (self.accessToken != nil);
 }

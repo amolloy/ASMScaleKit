@@ -6,20 +6,20 @@
 //
 //
 
-#import "ASMWithingsServiceProvider.h"
-#import "ASMOAuth1Client.h"
-#import "ASMOAuth1Token.h"
-#import "ASMWithingsUser.h"
+#import "ASKWithingsProvider.h"
+#import "ASKOAuth1Client.h"
+#import "ASKOAuth1Token.h"
+#import "ASKWithingsUser.h"
 #import <libextobjc/EXTScope.h>
 
-@interface ASMWithingsServiceProvider ()
+@interface ASKWithingsProvider ()
 @property (nonatomic, copy) NSString* oauthKey;
 @property (nonatomic, copy) NSString* oauthSecret;
 @property (nonatomic, copy) ASMScaleServiceProviderAuthenticationHandler authenticationCompletionHandler;
-@property (nonatomic, strong, readwrite) ASMOAuth1Client* client;
+@property (nonatomic, strong, readwrite) ASKOAuth1Client* client;
 @end
 
-@implementation ASMWithingsServiceProvider
+@implementation ASKWithingsProvider
 
 const NSInteger ASMWithingsServiceProviderNoUserID = 1;
 NSString* const ASMWithingsBaseURLString = @"http://wbsapi.withings.net";
@@ -36,11 +36,11 @@ static NSString* const kWithingsAuthBaseURLString = @"https://oauth.withings.com
 
 		NSURL* oauthURLBase = [NSURL URLWithString:kWithingsAuthBaseURLString];
 
-		self.client = [[ASMOAuth1Client alloc] initWithOAuthURLBase:oauthURLBase
+		self.client = [[ASKOAuth1Client alloc] initWithOAuthURLBase:oauthURLBase
 																key:self.oauthKey
 															 secret:self.oauthSecret];
-		self.client.protocolParameterLocation = ASMOAuth1ProtocolParameterURLQueryLocation;
-		self.client.providerHints = ASMOAuth1ClientWithingsProviderHints;
+		self.client.protocolParameterLocation = ASKOAuth1ProtocolParameterURLQueryLocation;
+		self.client.providerHints = ASKOAuth1ClientWithingsProviderHints;
 	}
 	return self;
 }
@@ -64,18 +64,18 @@ static NSString* const kWithingsAuthBaseURLString = @"https://oauth.withings.com
 
 - (Class)userClass
 {
-	return [ASMWithingsUser class];
+	return [ASKWithingsUser class];
 }
 
-- (ASMWithingsUser*)userWithUserID:(NSString*)userid
-					   accessToken:(ASMOAuth1Token*)accessToken
+- (ASKWithingsUser*)userWithUserID:(NSString*)userid
+					   accessToken:(ASKOAuth1Token*)accessToken
 				fromJSONDictionary:(NSDictionary*)json
 							 error:(NSError*__autoreleasing*)outError
 {
 	// I wonder if this might be better as an initializer in ASMWithingsUser. Initializers don't typically
 	// have out errors, though...
 	NSError* error = nil;
-	ASMWithingsUser* user = nil;
+	ASKWithingsUser* user = nil;
 
 	NSInteger status = -1;
 	if (json[@"status"] && [json[@"status"] isKindOfClass:[NSNumber class]])
@@ -143,7 +143,7 @@ static NSString* const kWithingsAuthBaseURLString = @"https://oauth.withings.com
 					name = userid;
 				}
 
-				user = [[ASMWithingsUser alloc] initWithUserId:userid
+				user = [[ASKWithingsUser alloc] initWithUserId:userid
 										  permenantAccessToken:accessToken
 														  name:name];
 			}
@@ -157,7 +157,7 @@ static NSString* const kWithingsAuthBaseURLString = @"https://oauth.withings.com
 	return user;
 }
 
-- (void)lookupUserInformationWithAccessToken:(ASMOAuth1Token*)accessToken
+- (void)lookupUserInformationWithAccessToken:(ASKOAuth1Token*)accessToken
 {
 	NSDictionary* userInfo = accessToken.userInfo;
 	NSString* userId = userInfo[@"userid"];
@@ -176,7 +176,7 @@ static NSString* const kWithingsAuthBaseURLString = @"https://oauth.withings.com
 		[[session dataTaskWithRequest:request
 					completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
 						NSError* outError = nil;
-						ASMWithingsUser* user = nil;
+						ASKWithingsUser* user = nil;
 						if (!error)
 						{
 							NSString* responseString = [[NSString alloc] initWithData:data
@@ -228,9 +228,9 @@ static NSString* const kWithingsAuthBaseURLString = @"https://oauth.withings.com
 						userAuthenticationPath:@"account/authorize"
 							   accessTokenPath:@"account/access_token"
 										 scope:nil //@"read"?
-								  accessMethod:ASMOAUTH1ClientAccessGETMethod
+								  accessMethod:ASKOAuth1ClientAccessGETMethod
 							fromViewController:viewController
-									completion:^(ASMOAuth1Token* accessToken, NSError *error)
+									completion:^(ASKOAuth1Token* accessToken, NSError *error)
 	 {
 		 @strongify(self);
 		 if (error)

@@ -6,10 +6,10 @@
 //
 //
 
-#import "ASMOAuth1Token.h"
+#import "ASKOAuth1Token.h"
 #import <FXKeychain/FXKeychain.h>
 
-@interface ASMOAuth1Token ()
+@interface ASKOAuth1Token ()
 @property (nonatomic, copy, readwrite) NSString* key;
 @property (nonatomic, copy, readwrite) NSString* secret;
 @property (nonatomic, copy, readwrite) NSString* session;
@@ -17,7 +17,7 @@
 @property (nonatomic, assign, readwrite) BOOL renewable;
 @end
 
-@implementation ASMOAuth1Token
+@implementation ASKOAuth1Token
 
 - (id)initWithResponseString:(NSString*)responseString
 {
@@ -182,9 +182,9 @@
 	return stored;
 }
 
-+ (ASMOAuth1Token*)oauth1TokenFromKeychainItemName:(NSString*)name error:(NSError*__autoreleasing*)outError
++ (ASKOAuth1Token*)oauth1TokenFromKeychainItemName:(NSString*)name error:(NSError*__autoreleasing*)outError
 {
-	ASMOAuth1Token* result = nil;
+	ASKOAuth1Token* result = nil;
 
 	NSData* passData = [[FXKeychain defaultKeychain] objectForKey:name];
 

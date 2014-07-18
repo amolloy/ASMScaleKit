@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ASMScaleKitMeasurement : NSObject
+@interface ASKMeasurement : NSObject
 
 @property (nonatomic, strong, readonly) NSDate* date;
 @property (nonatomic, strong, readonly) NSDecimalNumber* weightInKg;

@@ -6,15 +6,15 @@
 //
 //
 
-#import "ASMOAuth1AuthenticationViewController.h"
+#import "ASKOAuth1AuthenticationViewController.h"
 
-@interface ASMOAuth1AuthenticationViewController () <UIWebViewDelegate>
+@interface ASKOAuth1AuthenticationViewController () <UIWebViewDelegate>
 @property (nonatomic, strong) NSURL* authenticationURL;
 @property (nonatomic, strong) NSURL* sentinelURL;
 @property (nonatomic, copy) ASMOAuth1AuthenticationCompletionHandler completion;
 @end
 
-@implementation ASMOAuth1AuthenticationViewController
+@implementation ASKOAuth1AuthenticationViewController
 
 - (instancetype)initWithAuthorizationURL:(NSURL*)url
 							 sentinelURL:(NSURL*)sentinelURL

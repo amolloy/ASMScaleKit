@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ASMOAuth1Token : NSObject
+@interface ASKOAuth1Token : NSObject
 @property (nonatomic, copy, readonly) NSString* key;
 @property (nonatomic, copy, readonly) NSString* secret;
 @property (nonatomic, copy, readonly) NSString* session;
@@ -28,6 +28,6 @@
 - (BOOL)isExpired;
 
 - (BOOL)storeInKeychainWithName:(NSString*)name error:(NSError*__autoreleasing*)outError;
-+ (ASMOAuth1Token*)oauth1TokenFromKeychainItemName:(NSString*)name error:(NSError*__autoreleasing*)outError;
++ (ASKOAuth1Token*)oauth1TokenFromKeychainItemName:(NSString*)name error:(NSError*__autoreleasing*)outError;
 
 @end

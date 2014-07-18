@@ -6,15 +6,15 @@
 //
 //
 
-#import "ASMScaleKitMeasurement.h"
+#import "ASKMeasurement.h"
 
-@interface ASMScaleKitMeasurement ()
+@interface ASKMeasurement ()
 @property (nonatomic, strong, readwrite) NSDate* date;
 @property (nonatomic, strong, readwrite) NSDecimalNumber* weightInKg;
 @property (nonatomic, strong, readwrite) NSString* uniqueId;
 @end
 
-@implementation ASMScaleKitMeasurement
+@implementation ASKMeasurement
 
 - (instancetype)initWithDate:(NSDate*)date
 				  weightInKg:(NSDecimalNumber*)weightInKg
