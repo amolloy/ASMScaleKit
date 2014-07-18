@@ -53,8 +53,10 @@
 						   offset:nil
 					   completion:^(NSArray *entries, NSError *error) {
 						   self.measurements = entries;
-						   [self.tableView reloadData];
-						   [self.refreshControl endRefreshing];
+						   dispatch_async(dispatch_get_main_queue(), ^{
+							   [self.tableView reloadData];
+							   [self.refreshControl endRefreshing];
+						   });
 					   }];
 }
 

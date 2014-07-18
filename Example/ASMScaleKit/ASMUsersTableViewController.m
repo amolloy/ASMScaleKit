@@ -36,6 +36,7 @@
 
 	[[NSUserDefaults standardUserDefaults] setObject:plistUsers.copy
 											  forKey:[self usersKey]];
+	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)loadUsers
@@ -65,9 +66,11 @@
 									   }
 									   else
 									   {
-										   self.users = [self.users arrayByAddingObjectsFromArray:users];
-										   [self saveUsers];
-										   [self.tableView reloadData];
+										   dispatch_async(dispatch_get_main_queue(), ^{
+											   self.users = [self.users arrayByAddingObjectsFromArray:users];
+											   [self saveUsers];
+											   [self.tableView reloadData];
+										   });
 									   }
 								   }];
 }
