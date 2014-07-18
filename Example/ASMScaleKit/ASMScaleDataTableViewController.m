@@ -9,11 +9,17 @@
 #import "ASMScaleDataTableViewController.h"
 #import <ASMScaleKit/ASKUser.h>
 #import <ASMScaleKit/ASKMeasurement.h>
+#if ASKHealthKitAvailable
+#import <HealthKit/HealthKit.h>
+#endif
 
 @interface ASMScaleDataTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) NSArray* measurements;
 @property (nonatomic, strong) NSDateFormatter* dateFormatter;
 @property (nonatomic, strong) NSNumberFormatter* weightFormatter;
+#if ASKHealthKitAvailable
+@property (nonatomic, strong) NSMassFormatter* weightMassFormatter;
+#endif
 @end
 
 @implementation ASMScaleDataTableViewController
@@ -28,6 +34,14 @@
 
 	self.weightFormatter = [[NSNumberFormatter alloc] init];
 	self.weightFormatter.maximumFractionDigits = 2;
+
+#if ASKHealthKitAvailable
+	if (NSClassFromString(@"NSMassFormatter"))
+	{
+		self.weightMassFormatter = [[NSMassFormatter alloc] init];
+		self.weightMassFormatter.forPersonMassUse = YES;
+	}
+#endif
 
 	[self.refreshControl beginRefreshing];
 	[self reloadData];
@@ -83,6 +97,13 @@
 	ASKMeasurement* measurement = self.measurements[indexPath.row];
 
 	cell.textLabel.text = [self.dateFormatter stringFromDate:measurement.date];
+#if ASKHealthKitAvailable
+	if (self.weightMassFormatter)
+	{
+		cell.detailTextLabel.text = [self.weightMassFormatter stringFromKilograms:[measurement.weight doubleValueForUnit:[HKUnit gramUnitWithMetricPrefix:HKMetricPrefixKilo]]];
+	}
+	else
+#endif
 	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ kg", [self.weightFormatter stringFromNumber:measurement.weightInKg]];
 
     return cell;
