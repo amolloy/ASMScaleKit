@@ -50,7 +50,6 @@ extern NSInteger ASKOAuth1ClientWithingsProviderHints;
 @property (nonatomic, assign) ASKOAuth1ProtocolParameterLocation protocolParameterLocation;
 @property (nonatomic, assign) ASKOAuth1ClientSignatureMethod signatureMethod;
 @property (nonatomic, copy) NSString* realm;
-@property (nonatomic, strong, readonly) ASKOAuth1Token* accessToken;
 @property (nonatomic, assign) NSUInteger stringEncoding;
 
 - (instancetype)initWithOAuthURLBase:(NSURL*)oauthURLBase key:(NSString*)key secret:(NSString*)secret;

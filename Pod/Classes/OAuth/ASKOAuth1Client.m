@@ -42,7 +42,6 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 @interface ASKOAuth1Client ()
 @property (nonatomic, copy) NSString* consumerKey;
 @property (nonatomic, copy) NSString* consumerSecret;
-@property (nonatomic, strong, readwrite) ASKOAuth1Token* accessToken;
 @property (nonatomic, copy) ASKOAuth1ClientAuthorizeCompletion authorizationCompletion;
 @property (nonatomic, strong) NSURL* oauthURLBase;
 
@@ -113,13 +112,12 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 {
 	NSURLComponents* urlComponents = [NSURLComponents componentsWithURL:[self.oauthURLBase URLByAppendingPathComponent:path]
 												resolvingAgainstBaseURL:NO];
-	urlComponents.percentEncodedQuery = [NSString stringWithFormat:@"oauth_token=%@", [requestToken.key stringByAddingPercentEncodingWithAllowedCharacters:oauthParameterValidCharacterSet()]];
 
 	if (self.providerHints & ASKOAuth1ClientIncludeFullOAuthParametersInAuthenticationHint)
 	{
 		NSURLRequest* request = [NSURLRequest requestWithURL:urlComponents.URL];
 		request = [self requestWithOAuthParametersFromURLRequest:request
-													 accessToken:self.accessToken];
+													 accessToken:requestToken];
 
 		urlComponents = [NSURLComponents componentsWithURL:request.URL
 								   resolvingAgainstBaseURL:NO];
@@ -204,7 +202,6 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 								   completion:^(ASKOAuth1Token* accessToken, id responseObject, NSError* aatError)
 		 {
 			 @strongify(self);
-			 self.accessToken = accessToken;
 			 if (self.authorizationCompletion)
 			 {
 				 self.authorizationCompletion(accessToken, aatError);
@@ -226,8 +223,6 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 
     if (requestToken.key && requestToken.verifier)
 	{
-        self.accessToken = requestToken;
-
 		NSURLComponents* components = [NSURLComponents componentsWithURL:[self.oauthURLBase URLByAppendingPathComponent:path]
 												 resolvingAgainstBaseURL:NO];
 
@@ -271,7 +266,7 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 		[mutableRequest setHTTPBody:nil];
 
 		NSURLRequest* request = [self requestWithOAuthParametersFromURLRequest:mutableRequest
-																   accessToken:self.accessToken];
+																   accessToken:requestToken];
 
 		NSURLSession* session = [NSURLSession sharedSession];
 		[[session dataTaskWithRequest:request completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
@@ -313,7 +308,7 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 												resolvingAgainstBaseURL:NO];
 
 	NSMutableDictionary* parameters = @{}.mutableCopy;
-	if (scope && !self.accessToken)
+	if (scope)
 	{
 		parameters[@"scope"] = scope;
 	}
@@ -340,7 +335,7 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 	[mutableRequest setHTTPMethod:[NSString stringWithOAuth1ClientAccessMethod:accessMethod]];
 	[mutableRequest setHTTPBody:nil];
 	NSURLRequest* request = [self requestWithOAuthParametersFromURLRequest:mutableRequest
-															   accessToken:self.accessToken
+															   accessToken:nil
 															   callbackURL:[NSURL URLWithString:kASMOAuth1CallbackURLString]];
 
 	NSURLSession* session = [NSURLSession sharedSession];
@@ -440,39 +435,6 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 	}];
 
 	return oauthParameters;
-}
-
-- (NSString *)authorizationHeaderForURLRequest:(NSURLRequest*)request
-{
-    static NSString * const kASMAuth1AuthorizationFormatString = @"OAuth %@";
-
-    NSMutableDictionary* mutableAuthorizationParameters = [NSMutableDictionary dictionary];
-
-    if (self.consumerKey && self.consumerSecret)
-	{
-        [mutableAuthorizationParameters addEntriesFromDictionary:[self oauthParameters]];
-        if (self.accessToken)
-		{
-			// TODO    mutableAuthorizationParameters[@"oauth_token"] = self.accessToken.key;
-        }
-    }
-
-// TODO    mutableAuthorizationParameters[@"oauth_signature"] = [self oauthSignatureForURLRequest:request
-		//																			 token:self.accessToken];
-
-	NSArray* sortedComponents = [self oauthParametersQueryComponents];
-
-    NSMutableArray* mutableComponents = [NSMutableArray arrayWithCapacity:sortedComponents.count];
-    for (NSString *component in sortedComponents)
-	{
-        NSArray* subcomponents = [component componentsSeparatedByString:@"="];
-        if ([subcomponents count] == 2)
-		{
-            [mutableComponents addObject:[NSString stringWithFormat:@"%@=\"%@\"", subcomponents[0], subcomponents[1]]];
-        }
-    }
-
-    return [NSString stringWithFormat:kASMAuth1AuthorizationFormatString, [mutableComponents componentsJoinedByString:@", "]];
 }
 
 - (NSString*)plainTextSignatureForURLRequest:(NSURLRequest*)request
