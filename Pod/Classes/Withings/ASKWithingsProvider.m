@@ -67,7 +67,7 @@ static NSString* const kWithingsAuthBaseURLString = @"https://oauth.withings.com
 	return [ASKWithingsUser class];
 }
 
-- (ASKWithingsUser*)userWithUserID:(NSString*)userid
+- (ASKWithingsUser*)userWithUserID:(NSString*)userId
 					   accessToken:(ASKOAuth1Token*)accessToken
 				fromJSONDictionary:(NSDictionary*)json
 							 error:(NSError*__autoreleasing*)outError
@@ -140,10 +140,10 @@ static NSString* const kWithingsAuthBaseURLString = @"https://oauth.withings.com
 				}
 				if (name.length == 0)
 				{
-					name = userid;
+					name = userId;
 				}
 
-				user = [[ASKWithingsUser alloc] initWithUserId:userid
+				user = [[ASKWithingsUser alloc] initWithUserId:userId
 										  permenantAccessToken:accessToken
 														  name:name];
 			}
@@ -160,13 +160,13 @@ static NSString* const kWithingsAuthBaseURLString = @"https://oauth.withings.com
 - (void)lookupUserInformationWithAccessToken:(ASKOAuth1Token*)accessToken
 {
 	NSDictionary* userInfo = accessToken.userInfo;
-	NSString* userId = userInfo[@"userid"];
+	NSString* userId = userInfo[@"userId"];
 	if (userId)
 	{
 		NSURL* baseURL = [NSURL URLWithString:ASMWithingsBaseURLString];
 		NSURLComponents* components = [NSURLComponents componentsWithURL:[baseURL URLByAppendingPathComponent:@"user"]
 									   resolvingAgainstBaseURL:NO];
-		components.query = [NSString stringWithFormat:@"action=getbyuserid&userid=%@", userId];
+		components.query = [NSString stringWithFormat:@"action=getbyuserid&userId=%@", userId];
 
 		NSURLRequest* request = [NSURLRequest requestWithURL:components.URL];
 		request = [self.client requestWithOAuthParametersFromURLRequest:request

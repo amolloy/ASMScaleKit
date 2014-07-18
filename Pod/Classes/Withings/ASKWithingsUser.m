@@ -17,7 +17,7 @@
 static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.";
 
 @interface ASKWithingsUser ()
-@property (nonatomic, copy, readwrite) NSString* userid;
+@property (nonatomic, copy, readwrite) NSString* userId;
 @property (nonatomic, strong, readwrite) ASKOAuth1Token* accessToken;
 @property (nonatomic, copy, readwrite) NSString* name;
 @end
@@ -29,14 +29,14 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 	return self.name;
 }
 
-- (instancetype)initWithUserId:(NSString*)userid
+- (instancetype)initWithUserId:(NSString*)userId
 		  permenantAccessToken:(ASKOAuth1Token*)token
 						  name:(NSString*)name
 {
 	self = [super init];
 	if (self)
 	{
-		self.userid = userid;
+		self.userId = userId;
 		self.accessToken = token;
 		self.name = name;
 	}
@@ -62,7 +62,7 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 											 resolvingAgainstBaseURL:NO];
 
 	NSMutableDictionary* parameters = @{@"action": @"getmeas",
-										@"userid": self.userid,
+										@"userId": self.userId,
 										@"meastype": @"1",
 										@"category": @"1"}.mutableCopy;
 
@@ -221,7 +221,7 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 #pragma mark - Keychain
 - (NSString*)keychainName
 {
-	return [kWithingsUserKeychainPrefix stringByAppendingString:self.userid];
+	return [kWithingsUserKeychainPrefix stringByAppendingString:self.userId];
 }
 
 - (BOOL)storeSensitiveInformationInKeychain:(NSError*__autoreleasing*)outError
@@ -244,7 +244,7 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 	self = [super init];
 	if (self)
 	{
-		self.userid = [aDecoder decodeObjectOfClass:[NSString class] forKey:@"userid"];
+		self.userId = [aDecoder decodeObjectOfClass:[NSString class] forKey:@"userId"];
 		self.name = [aDecoder decodeObjectOfClass:[NSString class] forKey:@"name"];
 	}
 	return self;
@@ -252,7 +252,7 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 
 - (void)encodeWithCoder:(NSCoder*)aCoder
 {
-	[aCoder encodeObject:self.userid forKey:@"userid"];
+	[aCoder encodeObject:self.userId forKey:@"userId"];
 	[aCoder encodeObject:self.name forKey:@"name"];
 }
 
