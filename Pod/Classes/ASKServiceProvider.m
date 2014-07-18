@@ -7,6 +7,7 @@
 //
 
 #import "ASKServiceProvider.h"
+#import "ASKUser.h"
 
 @implementation ASKServiceProvider
 
