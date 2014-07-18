@@ -40,8 +40,9 @@ Pod::Spec.new do |s|
     ws.public_header_files = 'Pod/Classes/Withings/*.h'
   end
 
-# Based on Peter Hosey's Warnings.xcconfig. Put way down here to keep it out of the way.
   s.xcconfig = {
+	"OTHER_LDFLAGS[sdk=iphoneos8*]" => "-weak_framework HealthKit",
+	"OTHER_LDFLAGS[sdk=iphonesimulator8*]" => "-weak_framework HealthKit",
     "GCC_WARN_CHECK_SWITCH_STATEMENTS" => "YES",
     "GCC_WARN_SHADOW" => "YES",
     "GCC_WARN_64_TO_32_BIT_CONVERSION" => "YES",
