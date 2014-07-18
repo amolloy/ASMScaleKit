@@ -10,5 +10,5 @@
 #import "ASKServiceProvider.h"
 
 @interface ASMUsersTableViewController : UITableViewController
-@property (nonatomic, strong) id<ASKServiceProvider> provider;
+@property (nonatomic, strong) ASKServiceProvider* provider;
 @end

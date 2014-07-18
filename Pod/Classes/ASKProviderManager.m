@@ -16,7 +16,7 @@
 
 @implementation ASKProviderManager
 
-- (void)registerServiceProvider:(id<ASKServiceProvider>)serviceProvider
+- (void)registerServiceProvider:(ASKServiceProvider*)serviceProvider
 {
 	[self.providers addObject:serviceProvider];
 }
@@ -26,10 +26,10 @@
 	return self.providers.copy;
 }
 
-- (id<ASKServiceProvider>)serviceProviderForUser:(id<ASKUser>)user
+- (ASKServiceProvider*)serviceProviderForUser:(id<ASKUser>)user
 {
-	__block id<ASKServiceProvider> provider = nil;
-	[self.providers enumerateObjectsUsingBlock:^(id<ASKServiceProvider> obj, NSUInteger idx, BOOL *stop) {
+	__block ASKServiceProvider* provider = nil;
+	[self.providers enumerateObjectsUsingBlock:^(ASKServiceProvider* obj, NSUInteger idx, BOOL *stop) {
 		if ([user isKindOfClass:[obj userClass]])
 		{
 			provider = obj;

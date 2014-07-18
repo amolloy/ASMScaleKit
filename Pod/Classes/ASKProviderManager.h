@@ -6,15 +6,15 @@
 //
 //
 
-@protocol ASKServiceProvider;
+@class ASKServiceProvider;
 @protocol ASKUser;
 
 @interface ASKProviderManager : NSObject
 
 + (ASKProviderManager*)sharedManager;
 
-- (void)registerServiceProvider:(id<ASKServiceProvider>)serviceProvider;
+- (void)registerServiceProvider:(ASKServiceProvider*)serviceProvider;
 - (NSArray*)serviceProviders;
-- (id<ASKServiceProvider>)serviceProviderForUser:(id<ASKUser>)user;
+- (ASKServiceProvider*)serviceProviderForUser:(id<ASKUser>)user;
 
 @end

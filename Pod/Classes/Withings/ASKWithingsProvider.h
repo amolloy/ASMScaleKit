@@ -11,7 +11,7 @@
 
 @class ASKOAuth1Client;
 
-@interface ASKWithingsProvider : NSObject <ASKServiceProvider>
+@interface ASKWithingsProvider : ASKServiceProvider
 
 extern const NSInteger ASMWithingsServiceProviderNoUserID;
 extern NSString* const ASMWithingsBaseURLString;

@@ -55,7 +55,7 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 					offset:(NSNumber*)offset
 				completion:(void(^)(NSArray* entries, NSError* error))completion
 {
-	ASKWithingsProvider* serviceProvider = [[ASKProviderManager sharedManager] serviceProviderForUser:self];
+	ASKWithingsProvider* serviceProvider = (ASKWithingsProvider*)[[ASKProviderManager sharedManager] serviceProviderForUser:self];
 
 	NSURL* baseURL = [NSURL URLWithString:ASMWithingsBaseURLString];
 	NSURLComponents* components = [NSURLComponents componentsWithURL:[baseURL URLByAppendingPathComponent:@"measure"]

@@ -34,7 +34,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ScaleServiceProviderCell"
 															forIndexPath:indexPath];
     
-	id<ASKServiceProvider> serviceProvider = [[ASKProviderManager sharedManager] serviceProviders][indexPath.row];
+	ASKServiceProvider* serviceProvider = [[ASKProviderManager sharedManager] serviceProviders][indexPath.row];
 	cell.textLabel.text = [serviceProvider displayName];
 
     return cell;
