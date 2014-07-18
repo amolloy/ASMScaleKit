@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol ASKUser;
+@class ASKUser;
 
 @interface ASKServiceProvider : NSObject
 

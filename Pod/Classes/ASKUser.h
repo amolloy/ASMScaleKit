@@ -6,12 +6,12 @@
 //
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 /**
  *	Represents an individual (user) of a particular service.
  */
-@protocol ASKUser <NSObject, NSSecureCoding>
+@interface ASKUser : NSObject <NSSecureCoding>
 
 /**
  *	A string representing this user appropriate for displaying in a user interface.

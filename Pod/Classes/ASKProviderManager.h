@@ -7,7 +7,7 @@
 //
 
 @class ASKServiceProvider;
-@protocol ASKUser;
+@class ASKUser;
 
 @interface ASKProviderManager : NSObject
 
@@ -15,6 +15,6 @@
 
 - (void)registerServiceProvider:(ASKServiceProvider*)serviceProvider;
 - (NSArray*)serviceProviders;
-- (ASKServiceProvider*)serviceProviderForUser:(id<ASKUser>)user;
+- (ASKServiceProvider*)serviceProviderForUser:(ASKUser*)user;
 
 @end

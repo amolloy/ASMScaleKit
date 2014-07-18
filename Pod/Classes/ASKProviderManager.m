@@ -26,7 +26,7 @@
 	return self.providers.copy;
 }
 
-- (ASKServiceProvider*)serviceProviderForUser:(id<ASKUser>)user
+- (ASKServiceProvider*)serviceProviderForUser:(ASKUser*)user
 {
 	__block ASKServiceProvider* provider = nil;
 	[self.providers enumerateObjectsUsingBlock:^(ASKServiceProvider* obj, NSUInteger idx, BOOL *stop) {

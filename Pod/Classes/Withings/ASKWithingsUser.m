@@ -246,7 +246,7 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 
 - (id)initWithCoder:(NSCoder*)aDecoder
 {
-	self = [super init];
+	self = [super initWithCoder:aDecoder];
 	if (self)
 	{
 		self.userId = [aDecoder decodeObjectOfClass:[NSString class] forKey:@"userid"];
@@ -257,6 +257,7 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 
 - (void)encodeWithCoder:(NSCoder*)aCoder
 {
+	[super encodeWithCoder:aCoder];
 	[aCoder encodeObject:self.userId forKey:@"userid"];
 	[aCoder encodeObject:self.name forKey:@"name"];
 }

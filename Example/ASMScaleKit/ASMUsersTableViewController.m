@@ -24,7 +24,7 @@
 - (void)saveUsers
 {
 	__block NSMutableArray* plistUsers = [NSMutableArray arrayWithCapacity:self.users.count];
-	[self.users enumerateObjectsUsingBlock:^(id<ASKUser> user, NSUInteger idx, BOOL *stop) {
+	[self.users enumerateObjectsUsingBlock:^(ASKUser* user, NSUInteger idx, BOOL *stop) {
 		NSData* userData = [NSKeyedArchiver archivedDataWithRootObject:user];
 
 		if (userData)
@@ -45,7 +45,7 @@
 	__block NSMutableArray* users = [NSMutableArray arrayWithCapacity:plistUsers.count];
 
 	[plistUsers enumerateObjectsUsingBlock:^(NSData* userData, NSUInteger idx, BOOL *stop) {
-		id<ASKUser> user = [NSKeyedUnarchiver unarchiveObjectWithData:userData];
+		ASKUser* user = [NSKeyedUnarchiver unarchiveObjectWithData:userData];
 		if (user)
 		{
 			[user retrieveSensitiveInformationFromKeychain:nil];
@@ -104,7 +104,7 @@
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCell" forIndexPath:indexPath];
 
-	id<ASKUser> user = self.users[indexPath.row];
+	ASKUser* user = self.users[indexPath.row];
 
 	cell.textLabel.text = [user displayName];
 	cell.detailTextLabel.text = [user authenticated] ? @"Authenticated" : @"Not Authenticated";

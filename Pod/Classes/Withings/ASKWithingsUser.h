@@ -11,7 +11,7 @@
 
 @class ASKOAuth1Token;
 
-@interface ASKWithingsUser : NSObject <ASKUser>
+@interface ASKWithingsUser : ASKUser
 @property (nonatomic, copy, readonly) NSString* userId;
 @property (nonatomic, strong, readonly) ASKOAuth1Token* accessToken;
 @property (nonatomic, copy, readonly) NSString* name;
