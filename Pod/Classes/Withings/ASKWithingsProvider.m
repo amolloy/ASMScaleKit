@@ -160,7 +160,7 @@ static NSString* const kWithingsAuthBaseURLString = @"https://oauth.withings.com
 - (void)lookupUserInformationWithAccessToken:(ASKOAuth1Token*)accessToken
 {
 	NSDictionary* userInfo = accessToken.userInfo;
-	NSString* userId = userInfo[@"userId"];
+	NSString* userId = userInfo[@"userid"];
 	if (userId)
 	{
 		NSURL* baseURL = [NSURL URLWithString:ASMWithingsBaseURLString];

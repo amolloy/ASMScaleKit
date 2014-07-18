@@ -62,7 +62,7 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 											 resolvingAgainstBaseURL:NO];
 
 	NSMutableDictionary* parameters = @{@"action": @"getmeas",
-										@"userId": self.userId,
+										@"userid": self.userId,
 										@"meastype": @"1",
 										@"category": @"1"}.mutableCopy;
 
@@ -221,7 +221,12 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 #pragma mark - Keychain
 - (NSString*)keychainName
 {
-	return [kWithingsUserKeychainPrefix stringByAppendingString:self.userId];
+	NSString* keychainName = nil;
+	if (self.userId)
+	{
+		keychainName = [kWithingsUserKeychainPrefix stringByAppendingString:self.userId];
+	}
+	return keychainName;
 }
 
 - (BOOL)storeSensitiveInformationInKeychain:(NSError*__autoreleasing*)outError
@@ -244,7 +249,7 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 	self = [super init];
 	if (self)
 	{
-		self.userId = [aDecoder decodeObjectOfClass:[NSString class] forKey:@"userId"];
+		self.userId = [aDecoder decodeObjectOfClass:[NSString class] forKey:@"userid"];
 		self.name = [aDecoder decodeObjectOfClass:[NSString class] forKey:@"name"];
 	}
 	return self;
@@ -252,7 +257,7 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 
 - (void)encodeWithCoder:(NSCoder*)aCoder
 {
-	[aCoder encodeObject:self.userId forKey:@"userId"];
+	[aCoder encodeObject:self.userId forKey:@"userid"];
 	[aCoder encodeObject:self.name forKey:@"name"];
 }
 
