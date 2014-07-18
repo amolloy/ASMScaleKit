@@ -1,4 +1,5 @@
 0.1:
+	- Replace API which stores secure items in keychain with one which simply vends the secure items and requires the client to store them as they see fit.
 	- Support for Withings scales @done
 	- Name cleanup / refactor @done
 		- Replace all ASM prefixes with ASK (A(SM)ScaleKit) @done
@@ -6,7 +7,6 @@
 	- Move API for retrieving measurements from ServiceProvider to User @done
 	- Make Provider/User classes @done
 	- Move ScaleManager into Provider as static methods @done
-	- Remove dependency on FXKeychain
 	- Fix table views in Example updating @done
 	- Vend HKQuantity where available @done
-	- 
+	
