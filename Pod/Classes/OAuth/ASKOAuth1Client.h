@@ -1,5 +1,5 @@
 //
-//  ASMOAuthManager.h
+//  ASKOAuth1Client.h
 //  Pods
 //
 //  Created by Andrew Molloy on 7/13/14.

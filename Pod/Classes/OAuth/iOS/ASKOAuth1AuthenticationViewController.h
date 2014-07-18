@@ -1,5 +1,5 @@
 //
-//  ASMOAuth1AuthenticationViewController.h
+//  ASKOAuth1AuthenticationViewController.h
 //  Pods
 //
 //  Created by Andrew Molloy on 7/15/14.

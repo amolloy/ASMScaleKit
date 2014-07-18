@@ -1,5 +1,5 @@
 //
-//  ASMScaleKitMeasurement.h
+//  ASKMeasurement.h
 //  Pods
 //
 //  Created by Andrew Molloy on 7/17/14.

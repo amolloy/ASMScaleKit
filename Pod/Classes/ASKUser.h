@@ -1,5 +1,5 @@
 //
-//  ASMScaleUser.h
+//  ASKUser.h
 //  Pods
 //
 //  Created by Andrew Molloy on 7/11/14.

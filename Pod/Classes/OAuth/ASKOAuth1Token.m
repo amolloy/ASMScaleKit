@@ -1,5 +1,5 @@
 //
-//  ASMOAuth1Token.m
+//  ASKOAuth1Token.m
 //  Pods
 //
 //  Created by Andrew Molloy on 7/14/14.

@@ -1,5 +1,5 @@
 //
-//  ASMScaleManager.m
+//  ASKProviderManager.m
 //  Pods
 //
 //  Created by Andrew Molloy on 7/16/14.
