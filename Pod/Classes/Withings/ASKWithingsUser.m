@@ -15,6 +15,11 @@
 
 static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.";
 
+@interface ASKWithingsProvider ()
+extern NSString* const ASMWithingsBaseURLString;
+@property (nonatomic, strong, readonly) ASKOAuth1Client* client;
+@end
+
 @interface ASKWithingsUser ()
 @property (nonatomic, copy, readwrite) NSString* userId;
 @property (nonatomic, strong, readwrite) ASKOAuth1Token* accessToken;
@@ -99,7 +104,7 @@ static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.
 
 	NSURLRequest* request = [NSURLRequest requestWithURL:components.URL];
 	request = [serviceProvider.client requestWithOAuthParametersFromURLRequest:request
-														accessToken:self.accessToken];
+																   accessToken:self.accessToken];
 
 	@weakify(self);
 	NSURLSession* session = [NSURLSession sharedSession];

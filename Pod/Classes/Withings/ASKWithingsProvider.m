@@ -12,6 +12,12 @@
 #import "ASKWithingsUser.h"
 #import <libextobjc/EXTScope.h>
 
+@interface ASKWithingsUser ()
+- (instancetype)initWithUserId:(NSString*)userId
+		  permenantAccessToken:(ASKOAuth1Token*)token
+						  name:(NSString*)name;
+@end
+
 @interface ASKWithingsProvider ()
 @property (nonatomic, copy) NSString* oauthKey;
 @property (nonatomic, copy) NSString* oauthSecret;

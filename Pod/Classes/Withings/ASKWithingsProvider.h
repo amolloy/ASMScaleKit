@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <ASKServiceProvider.h>
 
-@class ASKOAuth1Client;
-
 /**
  *	An ASKServiceProvider for Withings' smart scales.
  *  http://www.withings.com
@@ -18,11 +16,6 @@
  *  http://oauth.withings.com/api
  */
 @interface ASKWithingsProvider : ASKServiceProvider
-
-extern const NSInteger ASMWithingsServiceProviderNoUserID;
-extern NSString* const ASMWithingsBaseURLString;
-
-@property (nonatomic, strong, readonly) ASKOAuth1Client* client;
 
 /**
  *	Initialize the ASKWithingsProvider. Like all ASKServiceProviders, ASKWithingsProvider
