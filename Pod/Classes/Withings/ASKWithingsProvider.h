@@ -11,6 +11,12 @@
 
 @class ASKOAuth1Client;
 
+/**
+ *	An ASKServiceProvider for Withings' smart scales.
+ *  http://www.withings.com
+ *  You must sign up for a developer account with Withings, which you can do here:
+ *  http://oauth.withings.com/api
+ */
 @interface ASKWithingsProvider : ASKServiceProvider
 
 extern const NSInteger ASMWithingsServiceProviderNoUserID;
@@ -18,6 +24,15 @@ extern NSString* const ASMWithingsBaseURLString;
 
 @property (nonatomic, strong, readonly) ASKOAuth1Client* client;
 
+/**
+ *	Initialize the ASKWithingsProvider. Like all ASKServiceProviders, ASKWithingsProvider
+ *  is an informal singleton and should only be created once early in execution,
+ *  such as during the application delegate's -application:didFinishLaunchingWithOptions:
+ *  method.
+ *
+ *	@param key    The OAuth key provided by Withings after registering your application.
+ *	@param secret The OAuth secret provided by Withings after registering your application.
+ */
 - (instancetype)initWithOAuthKey:(NSString*)key secret:(NSString*)secret;
 
 @end

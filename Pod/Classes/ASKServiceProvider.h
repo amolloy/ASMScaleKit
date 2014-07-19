@@ -47,8 +47,30 @@ typedef void(^ASMScaleServiceProviderAuthenticationHandler)(NSArray* users, NSEr
 - (void)authenticateFromViewController:(UIViewController*)viewController
 						withCompletion:(ASMScaleServiceProviderAuthenticationHandler)completion;
 
+/**
+ *	Registers a service provider for use. This should be done early on, such as in the application
+ *	delegate's -application:didFinishLaunchingWithOptions: method.
+ *
+ *	@param serviceProvider The service provider to register. See the documentation for each specific
+ *  service provider for documentation on initializing and registering them.
+ */
 + (void)registerServiceProvider:(ASKServiceProvider*)serviceProvider;
+
+/**
+ *	Returns an array of all of the registered service providers.
+ *
+ *	@return An NSArray containing all of the registered service providers.
+ */
 + (NSArray*)serviceProviders;
+
+/**
+ *	Finds the service provider a given ASKUser is associated with.
+ *
+ *	@param user an AKSUser
+ *
+ *	@return The service provider a given ASKUser is associated with. If the service provider the
+ *	ASKUser is associated with has not been registered, this will return nil.
+ */
 + (instancetype)serviceProviderForUser:(ASKUser*)user;
 
 @end

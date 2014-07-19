@@ -10,6 +10,14 @@
 
 /**
  *	Represents an individual (user) of a particular service.
+ *
+ *	ASKUser can be serialized and persisted using the NSSecureCoding protocol. However,
+ *  most (probably all) service providers require some sort of sensitive information,
+ *  such as access tokens or password hashes, to be associated with the user. It is up
+ *  to clients of this library to store and retrieve that sensitive information in the
+ *  user's keychain. At the moment, this is accomplished by passing an ASKUser instance
+ *  the -storeSensitiveInformationInKeychain: message when storing it, and the
+ *	-retrieveSensitiveInformationFromKeychain: message when loading it.
  */
 @interface ASKUser : NSObject <NSSecureCoding>
 
@@ -53,9 +61,32 @@
 					offset:(NSNumber*)offset
 				completion:(void(^)(NSArray* entries, NSError* error))completion;
 
+/**
+ *	Check if this user is authenticated and ready to use. Note that the authenticated state may not
+ *  be reliably determined until an actual attempt to query the service provider occurs. However, this 
+ *  can be used as an early filter to bypass an attempt to query the service provider if the user is
+ *  known not to be authenticated.
+ *
+ *	@return NO if the user is known to not be authenticated, YES otherwise.
+ */
 - (BOOL)authenticated;
 
+/**
+ *	Attempts to store any sensitive information (access tokens, etc) for this user into the keychain.
+ *
+ *	@param outError Contains any error which occurred while trying to store the sensitive information.
+ *
+ *	@return YES if storing the sensitive information in the keychain succeeded, NO otherwise.
+ */
 - (BOOL)storeSensitiveInformationInKeychain:(NSError*__autoreleasing*)outError;
+
+/**
+ *	Attempts to retrieve any sensitive information (access tokens, etc) for this user from the keychain.
+ *
+ *	@param outError Contains any error which occurred while trying to retrieve the sensitive information.
+ *
+ *	@return YES if retrieving the sensitive information was successful.
+ */
 - (BOOL)retrieveSensitiveInformationFromKeychain:(NSError*__autoreleasing*)outError;
 
 @end
