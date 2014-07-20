@@ -1,5 +1,6 @@
 0.1:
-	- Replace API which stores secure items in keychain with one which simply vends the secure items and requires the client to store them as they see fit.
+	- Remove dependency on FXKeychain @done
+	- Add API to optionally allow clients to store sensitive information themselves.
 	- Support for Withings scales @done
 	- Name cleanup / refactor @done
 		- Replace all ASM prefixes with ASK (A(SM)ScaleKit) @done

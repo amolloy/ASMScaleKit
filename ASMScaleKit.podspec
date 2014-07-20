@@ -33,7 +33,6 @@ Pod::Spec.new do |s|
   s.public_header_files = 'Pod/Classes/**/*.h'
 
   s.dependency 'libextobjc/EXTScope', '~> 0.4'
-  s.dependency 'FXKeychain', '~>1.5.0'
   
   s.subspec 'Withings' do |ws|
     ws.source_files = 'Pod/Classes/Withings'

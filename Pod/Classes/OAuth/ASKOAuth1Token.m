@@ -7,7 +7,7 @@
 //
 
 #import "ASKOAuth1Token.h"
-#import <FXKeychain/FXKeychain.h>
+#import "NSDictionary+ASKKeychain.h"
 
 @interface ASKOAuth1Token ()
 @property (nonatomic, copy, readwrite) NSString* key;
@@ -88,7 +88,7 @@
     return self;
 }
 
-- (id)initWithJSONDictionary:(NSDictionary*)jsonDict
+- (id)initWithDictionaryRepresentation:(NSDictionary*)jsonDict
 {
 	self = [super init];
 	if (self)
@@ -104,7 +104,7 @@
 	return self;
 }
 
-- (NSDictionary*)jsonDictionary
+- (NSDictionary*)dictionaryRepresentation
 {
 	NSMutableDictionary* dict = [NSMutableDictionary dictionary];
 	if (self.key) dict[@"key"] = self.key;
@@ -157,57 +157,18 @@
 
 - (BOOL)storeInKeychainWithName:(NSString*)name error:(NSError*__autoreleasing*)outError
 {
-	NSDictionary* passDict = [self jsonDictionary];
-	NSData* passData = [NSJSONSerialization dataWithJSONObject:passDict
-													   options:0
-														 error:outError];
-
-	BOOL stored = NO;
-	if (passData)
-	{
-		stored = [[FXKeychain defaultKeychain] setObject:passData forKey:name];
-		if (!stored)
-		{
-			// Would really like it if FXKeychain would pass out the error which caused it to fail instead of logging.
-			// Probably going to re-evaluate using FXKeychain.
-			if (outError)
-			{
-				// TODO
-				*outError = [NSError errorWithDomain:@"com.amolloy.asmoauth1token."
-												code:-1
-											userInfo:@{}];
-			}
-		}
-	}
-	return stored;
+	return [[self dictionaryRepresentation] ask_storeToKeychainWithKey:name error:outError];
 }
 
 + (ASKOAuth1Token*)oauth1TokenFromKeychainItemName:(NSString*)name error:(NSError*__autoreleasing*)outError
 {
 	ASKOAuth1Token* result = nil;
 
-	NSData* passData = [[FXKeychain defaultKeychain] objectForKey:name];
-
-	if (passData)
+	NSDictionary* passDict = [NSDictionary ask_dictionaryFromKeychainWithKey:name
+																	   error:outError];
+	if (passDict)
 	{
-		NSError* err = nil;
-		NSDictionary* passDict = [NSJSONSerialization JSONObjectWithData:passData
-																 options:0
-																   error:&err];
-		if (passDict)
-		{
-			result = [[self alloc] initWithJSONDictionary:passDict];
-		}
-		else if (outError)
-		{
-			*outError = err;
-		}
-	}
-	else if (outError)
-	{
-		*outError = [NSError errorWithDomain:@"com.amolloy.asmoauth1token."
-										code:-2
-									userInfo:@{}];
+		result = [[self alloc] initWithDictionaryRepresentation:passDict];
 	}
 
 	return result;
