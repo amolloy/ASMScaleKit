@@ -20,7 +20,7 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  ASMScaleKit: a4d6c29f07e40bc950530c2fb4c48bccd3ede454
+  ASMScaleKit: bdd8176fef11d012a1fcce00147271c5178862fc
   Expecta: 03aabd0a89d8dea843baecb19a7fd7466a69a31d
   libextobjc: ba42e4111f433273a886cd54f0ddaddb7f62f82f
   Specta: 9141310f46b1f68b676650ff2854e1ed0b74163a
