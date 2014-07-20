@@ -10,17 +10,15 @@
 Pod::Spec.new do |s|
   s.name             = "ASMScaleKit"
   s.version          = "0.1.0"
-  s.summary          = "A short description of ASMScaleKit."
+  s.summary          = "Wrapper for smart scale APIs (currently supports Withings)"
   s.description      = <<-DESC
-                       An optional longer description of ASMScaleKit
-
-                       * Markdown format.
-                       * Don't worry about the indent, we strip it!
+                       A wrapper for various smart scale APIs. Currently supports Withings' smart scales,
+					   but the intent is to add support for scales from other vendors.
                        DESC
-  s.homepage         = "https://github.com/<GITHUB_USERNAME>/ASMScaleKit"
+  s.homepage         = "https://github.com/amolloy/ASMScaleKit"
   s.license          = 'MIT'
   s.author           = { "Andrew Molloy" => "amolloy@gmail.com" }
-  s.source           = { :git => "https://github.com/<GITHUB_USERNAME>/ASMScaleKit.git", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/amolloy/ASMScaleKit.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/amolloy'
 
   s.platform     = :ios, '7.0' # iOS only for now, :osx, '10.9'
