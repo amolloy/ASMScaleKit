@@ -66,7 +66,7 @@ typedef void(^ASMScaleServiceProviderAuthenticationHandler)(NSArray* users, NSEr
 /**
  *	Finds the service provider a given ASKUser is associated with.
  *
- *	@param user an AKSUser
+ *	@param user an ASKUser
  *
  *	@return The service provider a given ASKUser is associated with. If the service provider the
  *	ASKUser is associated with has not been registered, this will return nil.

@@ -20,7 +20,7 @@
  *	-retrieveSensitiveInformationFromKeychain: message when loading it.
  *	Alternatively, for more control over how the information is stored in the keychain,
  *  the sensitive information can be serialized / deserialized to a form suitable for
- *  storage in the keychain via -serializeSensitiveInformation: and 
+ *  storage in the keychain via -serializeSensitiveInformationError: and
  *  -deserializeSensitiveInformation:.
  */
 @interface ASKUser : NSObject <NSSecureCoding>
