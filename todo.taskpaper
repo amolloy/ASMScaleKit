@@ -1,6 +1,6 @@
 0.1:
 	- Remove dependency on FXKeychain @done
-	- Add API to optionally allow clients to store sensitive information themselves.
+	- Add API to optionally allow clients to store sensitive information themselves. @done
 	- Support for Withings scales @done
 	- Name cleanup / refactor @done
 		- Replace all ASM prefixes with ASK (A(SM)ScaleKit) @done

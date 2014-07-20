@@ -30,4 +30,7 @@
 - (BOOL)storeInKeychainWithName:(NSString*)name error:(NSError*__autoreleasing*)outError;
 + (ASKOAuth1Token*)oauth1TokenFromKeychainItemName:(NSString*)name error:(NSError*__autoreleasing*)outError;
 
+- (NSDictionary*)dictionaryRepresentation;
+- (id)initWithDictionaryRepresentation:(NSDictionary*)dict;
+
 @end

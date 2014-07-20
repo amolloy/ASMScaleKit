@@ -58,4 +58,16 @@
 {
 }
 
+- (NSData*)serializedSensitiveInformationError:(NSError*__autoreleasing*)outError
+{
+	[self doesNotRecognizeSelector:_cmd];
+	return nil;
+}
+
+- (BOOL)deserializedSensitiveInformation:(NSData*)serializedData error:(NSError*__autoreleasing*)outError
+{
+	[self doesNotRecognizeSelector:_cmd];
+	return NO;
+}
+
 @end

@@ -15,9 +15,13 @@
  *  most (probably all) service providers require some sort of sensitive information,
  *  such as access tokens or password hashes, to be associated with the user. It is up
  *  to clients of this library to store and retrieve that sensitive information in the
- *  user's keychain. At the moment, this is accomplished by passing an ASKUser instance
+ *  user's keychain. This can be accomplished by passing an ASKUser instance
  *  the -storeSensitiveInformationInKeychain: message when storing it, and the
  *	-retrieveSensitiveInformationFromKeychain: message when loading it.
+ *	Alternatively, for more control over how the information is stored in the keychain,
+ *  the sensitive information can be serialized / deserialized to a form suitable for
+ *  storage in the keychain via -serializeSensitiveInformation: and 
+ *  -deserializeSensitiveInformation:.
  */
 @interface ASKUser : NSObject <NSSecureCoding>
 
@@ -88,5 +92,30 @@
  *	@return YES if retrieving the sensitive information was successful.
  */
 - (BOOL)retrieveSensitiveInformationFromKeychain:(NSError*__autoreleasing*)outError;
+
+/**
+ *	Serializes the sensitive information for this user into an NSData, which can then be stored
+ *  in the user's keychain. This is an alternative to using -storeSensitiveInformationInKeychain:.
+ *  Note that the data is not encrypted and is therefore not suitable for storing in an unencrypted
+ *  store.
+ *
+ *	@param outError Contains any error which occurred while trying to serialize the sensitive information.
+ *
+ *	@return Data containing a serialized form of the sensitive information, suitable for storage in
+ *  the user's keychain.
+ */
+- (NSData*)serializedSensitiveInformationError:(NSError*__autoreleasing*)outError;
+
+/**
+ *	Deserializes the sensitive information for this user from the given NSData. This should be
+ *  data that was previously generated with -serializedSensitiveInformationError:. This is an
+ *  alternative to -retrieveSensitiveInformationForKeychain:.
+ *
+ *	@param outError Contains any error which occurred while tyring to deserialize the sensitive
+ *  information.
+ *
+ *	@return YES if deserialization was successful.
+ */
+- (BOOL)deserializedSensitiveInformation:(NSData*)serializedData error:(NSError*__autoreleasing*)outError;
 
 @end

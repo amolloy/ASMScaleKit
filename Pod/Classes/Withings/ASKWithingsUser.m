@@ -11,6 +11,7 @@
 #import "ASKOAuth1Client.h"
 #import "ASKMeasurement.h"
 #import "ASKWithingsProvider.h"
+#import "NSDictionary+ASKKeychain.h"
 #import <libextobjc/EXTScope.h>
 
 static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.";
@@ -269,6 +270,22 @@ extern NSString* const ASMWithingsBaseURLString;
 + (BOOL)supportsSecureCoding
 {
 	return YES;
+}
+
+- (NSData*)serializedSensitiveInformationError:(NSError*__autoreleasing*)outError
+{
+	return [[self.accessToken dictionaryRepresentation] ask_serializedDataForKeychainError:outError];
+}
+
+- (BOOL)deserializedSensitiveInformation:(NSData*)serializedData error:(NSError*__autoreleasing*)outError
+{
+	NSDictionary* tokenDict = [NSDictionary ask_dictionaryFromSerializedData:serializedData
+																	   error:outError];
+	if (tokenDict)
+	{
+		self.accessToken = [[ASKOAuth1Token alloc] initWithDictionaryRepresentation:tokenDict];
+	}
+	return nil != self.accessToken;
 }
 
 @end

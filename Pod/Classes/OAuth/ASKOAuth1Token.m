@@ -88,18 +88,18 @@
     return self;
 }
 
-- (id)initWithDictionaryRepresentation:(NSDictionary*)jsonDict
+- (id)initWithDictionaryRepresentation:(NSDictionary*)dict
 {
 	self = [super init];
 	if (self)
 	{
-		self.key = jsonDict[@"key"];
-		self.secret = jsonDict[@"secret"];
-		self.session = jsonDict[@"session"];
-		self.expiration = jsonDict[@"expiration"];
-		self.renewable = [jsonDict[@"renewable"] boolValue];
-		self.userInfo = jsonDict[@"userInfo"];
-		self.verifier = jsonDict[@"verifier"];
+		self.key = dict[@"key"];
+		self.secret = dict[@"secret"];
+		self.session = dict[@"session"];
+		self.expiration = dict[@"expiration"];
+		self.renewable = [dict[@"renewable"] boolValue];
+		self.userInfo = dict[@"userInfo"];
+		self.verifier = dict[@"verifier"];
 	}
 	return self;
 }
