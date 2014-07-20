@@ -66,16 +66,19 @@
 							limit:nil
 						   offset:nil
 					   completion:^(NSArray *entries, NSError *error) {
-						   self.measurements = entries;
-						   dispatch_async(dispatch_get_main_queue(), ^{
-							   [self.tableView reloadData];
-							   [self.refreshControl endRefreshing];
-						   });
+						   if (!error)
+						   {
+							   self.measurements = entries;
+							   dispatch_async(dispatch_get_main_queue(), ^{
+								   [self.tableView reloadData];
+								   [self.refreshControl endRefreshing];
+							   });
+						   }
+						   else
+						   {
+							   NSLog(@"Error: %@", error);
+						   }
 					   }];
-}
-
-- (IBAction)logout:(id)sender
-{
 }
 
 #pragma mark - Table view data source
