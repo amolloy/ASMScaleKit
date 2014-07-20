@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <ASMScaleKit/ASKUser.h>
+#import "ASKUser.h"
 
 @interface ASKWithingsUser : ASKUser
 @end

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <ASKServiceProvider.h>
+#import "ASKServiceProvider.h"
 
 /**
  *	An ASKServiceProvider for Withings' smart scales.
