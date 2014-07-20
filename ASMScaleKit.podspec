@@ -23,16 +23,16 @@ Pod::Spec.new do |s|
 
   s.platform     = :ios, '7.0' # iOS only for now, :osx, '10.9'
   s.requires_arc = true
-
-  s.source_files = 'Pod/Classes', 'Pod/Classes/OAuth'
-  
-  s.ios.source_files = 'Pod/Classes/OAuth/iOS'
-
-  s.public_header_files = 'Pod/Classes/*.h'
-
   s.dependency 'libextobjc/EXTScope', '~> 0.4'
-  
+
+  s.subspec 'Core' do |cs|
+    cs.source_files = 'Pod/Classes', 'Pod/Classes/OAuth'
+    cs.ios.source_files = 'Pod/Classes/OAuth/iOS'
+    cs.public_header_files = 'Pod/Classes/*.h'
+  end
+
   s.subspec 'Withings' do |ws|
+    ws.dependency 'ASMScaleKit/Core'
     ws.source_files = 'Pod/Classes/Withings'
     ws.public_header_files = 'Pod/Classes/Withings/*.h'
   end
