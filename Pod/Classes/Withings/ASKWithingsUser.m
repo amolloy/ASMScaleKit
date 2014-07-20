@@ -272,12 +272,12 @@ extern NSString* const ASMWithingsBaseURLString;
 	return YES;
 }
 
-- (NSData*)serializedSensitiveInformationError:(NSError*__autoreleasing*)outError
+- (NSData*)serializeSensitiveInformationError:(NSError*__autoreleasing*)outError
 {
 	return [[self.accessToken dictionaryRepresentation] ask_serializedDataForKeychainError:outError];
 }
 
-- (BOOL)deserializedSensitiveInformation:(NSData*)serializedData error:(NSError*__autoreleasing*)outError
+- (BOOL)deserializeSensitiveInformation:(NSData*)serializedData error:(NSError*__autoreleasing*)outError
 {
 	NSDictionary* tokenDict = [NSDictionary ask_dictionaryFromSerializedData:serializedData
 																	   error:outError];

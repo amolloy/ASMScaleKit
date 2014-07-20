@@ -104,7 +104,7 @@
  *	@return Data containing a serialized form of the sensitive information, suitable for storage in
  *  the user's keychain.
  */
-- (NSData*)serializedSensitiveInformationError:(NSError*__autoreleasing*)outError;
+- (NSData*)serializeSensitiveInformationError:(NSError*__autoreleasing*)outError;
 
 /**
  *	Deserializes the sensitive information for this user from the given NSData. This should be
@@ -116,6 +116,6 @@
  *
  *	@return YES if deserialization was successful.
  */
-- (BOOL)deserializedSensitiveInformation:(NSData*)serializedData error:(NSError*__autoreleasing*)outError;
+- (BOOL)deserializeSensitiveInformation:(NSData*)serializedData error:(NSError*__autoreleasing*)outError;
 
 @end
