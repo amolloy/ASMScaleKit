@@ -188,17 +188,26 @@
 
 	NSData* passData = [[FXKeychain defaultKeychain] objectForKey:name];
 
-	NSError* err = nil;
-	NSDictionary* passDict = [NSJSONSerialization JSONObjectWithData:passData
-															 options:0
-															   error:&err];
-	if (passDict)
+	if (passData)
 	{
-		result = [[self alloc] initWithJSONDictionary:passDict];
+		NSError* err = nil;
+		NSDictionary* passDict = [NSJSONSerialization JSONObjectWithData:passData
+																 options:0
+																   error:&err];
+		if (passDict)
+		{
+			result = [[self alloc] initWithJSONDictionary:passDict];
+		}
+		else if (outError)
+		{
+			*outError = err;
+		}
 	}
 	else if (outError)
 	{
-		*outError = err;
+		*outError = [NSError errorWithDomain:@"com.amolloy.asmoauth1token."
+										code:-2
+									userInfo:@{}];
 	}
 
 	return result;
