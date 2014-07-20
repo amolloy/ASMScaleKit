@@ -11,13 +11,18 @@
 
 @implementation NSDictionary (ASKKeychain)
 
+- (NSData*)ask_serializedDataForKeychainError:(NSError*__autoreleasing*)error
+{
+	return [NSPropertyListSerialization dataWithPropertyList:self
+													  format:NSPropertyListXMLFormat_v1_0
+													 options:0
+													   error:error];
+}
+
 - (BOOL)ask_storeToKeychainWithKey:(NSString*)aKey error:(NSError*__autoreleasing*)error
 {
 	BOOL stored = NO;
-    NSData* serializedDictionary = [NSPropertyListSerialization dataWithPropertyList:self
-																			  format:NSPropertyListXMLFormat_v1_0
-																			 options:0
-																			   error:error];
+	NSData* serializedDictionary = [self ask_serializedDataForKeychainError:error];
     if(!error)
 	{
         (void)[self ask_deleteFromKeychainWithKey:aKey error:error];
@@ -45,6 +50,13 @@
 	return stored;
 }
 
++ (NSDictionary*)ask_dictionaryFromSerializedData:(NSData*)serializedDictionary error:(NSError*__autoreleasing*)error
+{
+	return [NSPropertyListSerialization propertyListWithData:serializedDictionary
+													 options:0
+													  format:NULL
+													   error:error];
+}
 
 + (NSDictionary*)ask_dictionaryFromKeychainWithKey:(NSString*)aKey error:(NSError*__autoreleasing*)error
 {
@@ -59,10 +71,8 @@
 	NSDictionary* storedDictionary = nil;
     if(osStatus == noErr)
 	{
-		storedDictionary = [NSPropertyListSerialization propertyListWithData:serializedDictionary
-																	 options:0
-																	  format:NULL
-																	   error:error];
+		storedDictionary = [self ask_dictionaryFromSerializedData:serializedDictionary
+															error:error];
     }
     else
 	{
