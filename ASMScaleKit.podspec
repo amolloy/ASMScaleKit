@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "ASMScaleKit"
-  s.version          = "0.1.0"
+  s.version          = "0.1.1"
   s.summary          = "Wrapper for smart scale APIs (currently supports Withings)"
   s.description      = <<-DESC
                        A wrapper for various smart scale APIs. Currently supports Withings' smart scales,
@@ -38,8 +38,8 @@ Pod::Spec.new do |s|
   end
 
   s.xcconfig = {
-	"OTHER_LDFLAGS[sdk=iphoneos8*]" => "-weak_framework HealthKit",
-	"OTHER_LDFLAGS[sdk=iphonesimulator8*]" => "-weak_framework HealthKit",
+	"OTHER_LDFLAGS[sdk=iphoneos8*]" => "${inherited} -weak_framework HealthKit",
+	"OTHER_LDFLAGS[sdk=iphonesimulator8*]" => "$(inherited} -weak_framework HealthKit",
     "GCC_WARN_CHECK_SWITCH_STATEMENTS" => "YES",
     "GCC_WARN_SHADOW" => "YES",
     "GCC_WARN_64_TO_32_BIT_CONVERSION" => "YES",
