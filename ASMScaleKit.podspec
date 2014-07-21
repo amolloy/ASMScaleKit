@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "ASMScaleKit"
-  s.version          = "0.1.1"
+  s.version          = "0.1.2"
   s.summary          = "Wrapper for smart scale APIs (currently supports Withings)"
   s.description      = <<-DESC
                        A wrapper for various smart scale APIs. Currently supports Withings' smart scales,
@@ -36,42 +36,4 @@ Pod::Spec.new do |s|
     ws.source_files = 'Pod/Classes/Withings'
     ws.public_header_files = 'Pod/Classes/Withings/*.h'
   end
-
-  s.xcconfig = {
-	"OTHER_LDFLAGS[sdk=iphoneos8*]" => "${inherited} -weak_framework HealthKit",
-	"OTHER_LDFLAGS[sdk=iphonesimulator8*]" => "$(inherited} -weak_framework HealthKit",
-    "GCC_WARN_CHECK_SWITCH_STATEMENTS" => "YES",
-    "GCC_WARN_SHADOW" => "YES",
-    "GCC_WARN_64_TO_32_BIT_CONVERSION" => "YES",
-    "CLANG_WARN_ENUM_CONVERSION" => "YES",
-    "CLANG_WARN_INT_CONVERSION" => "YES",
-    "CLANG_WARN_CONSTANT_CONVERSION" => "YES",
-    "GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED" => "YES",
-    "GCC_WARN_ABOUT_RETURN_TYPE" => "YES",
-    "GCC_WARN_MISSING_PARENTHESES" => "YES",
-    "GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS" => "YES",
-    "GCC_WARN_ABOUT_MISSING_NEWLINE" => "YES",
-    "GCC_WARN_SIGN_COMPARE" => "YES",
-    "GCC_WARN_UNDECLARED_SELECTOR" => "YES",
-    "GCC_WARN_UNUSED_FUNCTION" => "YES",
-    "GCC_WARN_UNUSED_LABEL" => "YES",
-    "GCC_WARN_UNUSED_VALUE" => "YES",
-    "GCC_WARN_UNUSED_VARIABLE" => "YES",
-    "GCC_WARN_ABOUT_MISSING_PROTOTYPES" => "YES",
-    "GCC_WARN_TYPECHECK_CALLS_TO_PRINTF" => "YES",
-    "GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS" => "YES",
-    "GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS" => "YES",
-    "GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO" => "YES",
-    "GCC_WARN_NON_VIRTUAL_DESTRUCTOR" => "YES",
-    "CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS" => "YES",
-    "CLANG_WARN_IMPLICIT_SIGN_CONVERSION" => "YES",
-    "CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION" => "YES",
-    "CLANG_WARN_EMPTY_BODY" => "YES",
-    "CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF" => "YES",
-    "CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER" => "YES",
-    "CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND" => "YES",
-    "OTHER_CFLAGS" => "-Wextra -Wno-unused-parameter -Wformat=2",
-    "GCC_TREAT_WARNINGS_AS_ERRORS" => "YES"
-  }
-
 end

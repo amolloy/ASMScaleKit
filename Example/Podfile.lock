@@ -1,11 +1,11 @@
 PODS:
-  - ASMScaleKit (0.1.0):
+  - ASMScaleKit (0.1.2):
     - ASMScaleKit/Core
     - ASMScaleKit/Withings
     - libextobjc/EXTScope (~> 0.4)
-  - ASMScaleKit/Core (0.1.0):
+  - ASMScaleKit/Core (0.1.2):
     - libextobjc/EXTScope (~> 0.4)
-  - ASMScaleKit/Withings (0.1.0):
+  - ASMScaleKit/Withings (0.1.2):
     - ASMScaleKit/Core
     - libextobjc/EXTScope (~> 0.4)
   - Expecta (0.3.1)
@@ -24,7 +24,7 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  ASMScaleKit: 45faac7b310eded7c1d8b988937e5847913a0d2d
+  ASMScaleKit: 710a3e592a309673d472040db5a272b7b6e5ae6e
   Expecta: 03aabd0a89d8dea843baecb19a7fd7466a69a31d
   libextobjc: ba42e4111f433273a886cd54f0ddaddb7f62f82f
   Specta: 9141310f46b1f68b676650ff2854e1ed0b74163a
