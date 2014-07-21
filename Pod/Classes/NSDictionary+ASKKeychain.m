@@ -23,7 +23,7 @@
 {
 	BOOL stored = NO;
 	NSData* serializedDictionary = [self ask_serializedDataForKeychainError:error];
-    if(!error)
+    if(serializedDictionary)
 	{
         (void)[self ask_deleteFromKeychainWithKey:aKey error:error];
 
