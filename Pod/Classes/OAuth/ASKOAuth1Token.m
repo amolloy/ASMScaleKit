@@ -144,8 +144,8 @@
 
             if (key && value)
 			{
-				key = [key stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-				value = [value stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+				key = [key stringByRemovingPercentEncoding];
+				value = [value stringByRemovingPercentEncoding];
 
 				parameters[key] = value;
             }

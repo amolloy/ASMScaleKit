@@ -157,9 +157,9 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 		if (components.count == 2)
 		{
 			NSString* key = components[0];
-			key = [key stringByReplacingPercentEscapesUsingEncoding:self.stringEncoding];
+			key = [key stringByRemovingPercentEncoding];
 			NSString* value = components[1];
-			value = [value stringByReplacingPercentEscapesUsingEncoding:self.stringEncoding];
+			value = [value stringByRemovingPercentEncoding];
 
 			if (key.length != 0 && value)
 			{
