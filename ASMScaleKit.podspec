@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "ASMScaleKit"
-  s.version          = "0.1.2"
+  s.version          = "0.1.3"
   s.summary          = "Wrapper for smart scale APIs (currently supports Withings)"
   s.description      = <<-DESC
                        A wrapper for various smart scale APIs. Currently supports Withings' smart scales,
