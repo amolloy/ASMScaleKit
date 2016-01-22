@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		26F077E31A724CDD858DDF1B /* libPods-ASMScaleKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 281BEBC8E2CB4381AD94CA56 /* libPods-ASMScaleKit.a */; };
+		5AA150BB41D0BF5188EAABE5 /* libPods-Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 013EC8FDB17EF24287AC06EA /* libPods-Tests.a */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -20,12 +20,12 @@
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
+		8B845598EA2C166ECD0CFDA7 /* libPods-ASMScaleKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4413A91027A8BC14BBE66966 /* libPods-ASMScaleKit.a */; };
 		B4654BD91971B2280025CB56 /* ASMScaleDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4654BD81971B2280025CB56 /* ASMScaleDataTableViewController.m */; };
 		B4654BE71974BB150025CB56 /* ASMOAuth1ClientTestsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B4654BE61974BB150025CB56 /* ASMOAuth1ClientTestsSpec.m */; };
 		B4654BE919754FE10025CB56 /* WithingsKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4654BE819754FE10025CB56 /* WithingsKeys.plist */; };
 		B46960841977143B00ABB909 /* ASMServiceProvidersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B46960831977143B00ABB909 /* ASMServiceProvidersTableViewController.m */; };
 		B4C1751419780EE000234535 /* ASMUsersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C1751319780EE000234535 /* ASMUsersTableViewController.m */; };
-		D9DD13D0012C4FCEB1DEFD99 /* libPods-Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 45A25D76E5D14C23B1AFF527 /* libPods-Tests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,9 +39,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		281BEBC8E2CB4381AD94CA56 /* libPods-ASMScaleKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ASMScaleKit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		45A25D76E5D14C23B1AFF527 /* libPods-Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		496FE8C828EB4EB491E5DC27 /* Pods-ASMScaleKit.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ASMScaleKit.xcconfig"; path = "Pods/Pods-ASMScaleKit.xcconfig"; sourceTree = "<group>"; };
+		013EC8FDB17EF24287AC06EA /* libPods-Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1548D7281154ABBEE714CE8E /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		2173C292E6E522686AF7844F /* Pods-ASMScaleKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ASMScaleKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ASMScaleKit/Pods-ASMScaleKit.debug.xcconfig"; sourceTree = "<group>"; };
+		39EB5C21FECA98B691E9E324 /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
+		4413A91027A8BC14BBE66966 /* libPods-ASMScaleKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ASMScaleKit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5094569E627948CCB8CDC282 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		509FF51409F9456591A3CF35 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* ASMScaleKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ASMScaleKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,7 +72,7 @@
 		B46960831977143B00ABB909 /* ASMServiceProvidersTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASMServiceProvidersTableViewController.m; sourceTree = "<group>"; };
 		B4C1751219780EE000234535 /* ASMUsersTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASMUsersTableViewController.h; sourceTree = "<group>"; };
 		B4C1751319780EE000234535 /* ASMUsersTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASMUsersTableViewController.m; sourceTree = "<group>"; };
-		DEAB457C860F496B92391BC7 /* Pods-Tests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.xcconfig"; path = "Pods/Pods-Tests.xcconfig"; sourceTree = "<group>"; };
+		CEB6B0AAD1640A5EC3D1ED8C /* Pods-ASMScaleKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ASMScaleKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-ASMScaleKit/Pods-ASMScaleKit.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +83,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				26F077E31A724CDD858DDF1B /* libPods-ASMScaleKit.a in Frameworks */,
+				8B845598EA2C166ECD0CFDA7 /* libPods-ASMScaleKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,7 +94,7 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				D9DD13D0012C4FCEB1DEFD99 /* libPods-Tests.a in Frameworks */,
+				5AA150BB41D0BF5188EAABE5 /* libPods-Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,8 +109,7 @@
 				6003F5B5195388D20070C39A /* Tests */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
-				496FE8C828EB4EB491E5DC27 /* Pods-ASMScaleKit.xcconfig */,
-				DEAB457C860F496B92391BC7 /* Pods-Tests.xcconfig */,
+				780F534E1C17BC3CC1D12A8F /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -128,8 +129,8 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
-				281BEBC8E2CB4381AD94CA56 /* libPods-ASMScaleKit.a */,
-				45A25D76E5D14C23B1AFF527 /* libPods-Tests.a */,
+				4413A91027A8BC14BBE66966 /* libPods-ASMScaleKit.a */,
+				013EC8FDB17EF24287AC06EA /* libPods-Tests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -193,6 +194,17 @@
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
+		780F534E1C17BC3CC1D12A8F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2173C292E6E522686AF7844F /* Pods-ASMScaleKit.debug.xcconfig */,
+				CEB6B0AAD1640A5EC3D1ED8C /* Pods-ASMScaleKit.release.xcconfig */,
+				1548D7281154ABBEE714CE8E /* Pods-Tests.debug.xcconfig */,
+				39EB5C21FECA98B691E9E324 /* Pods-Tests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -200,11 +212,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6003F5BF195388D20070C39A /* Build configuration list for PBXNativeTarget "ASMScaleKit" */;
 			buildPhases = (
-				909622B3F2F545E4A64CF25F /* Check Pods Manifest.lock */,
+				C0FC72FF2A740D8848A131FE /* Check Pods Manifest.lock */,
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				13AC3B7AD69B4662AD8FF1CB /* Copy Pods Resources */,
+				C459ADF845D938F273B3019A /* Embed Pods Frameworks */,
+				F04A3340BEBC0C40FAFE4408 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -219,11 +232,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6003F5C2195388D20070C39A /* Build configuration list for PBXNativeTarget "Tests" */;
 			buildPhases = (
-				302253A72B894924A52EA3AC /* Check Pods Manifest.lock */,
+				8EF10FAF931FB76944A73454 /* Check Pods Manifest.lock */,
 				6003F5AA195388D20070C39A /* Sources */,
 				6003F5AB195388D20070C39A /* Frameworks */,
 				6003F5AC195388D20070C39A /* Resources */,
-				B2C14D6A1DEE498BB341AB5E /* Copy Pods Resources */,
+				37E0808A9CF7A87AD76BC416 /* Embed Pods Frameworks */,
+				A534DD139F42C17A684B1E68 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -292,22 +306,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		13AC3B7AD69B4662AD8FF1CB /* Copy Pods Resources */ = {
+		37E0808A9CF7A87AD76BC416 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-ASMScaleKit-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Tests/Pods-Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		302253A72B894924A52EA3AC /* Check Pods Manifest.lock */ = {
+		8EF10FAF931FB76944A73454 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -322,7 +336,22 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		909622B3F2F545E4A64CF25F /* Check Pods Manifest.lock */ = {
+		A534DD139F42C17A684B1E68 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Tests/Pods-Tests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C0FC72FF2A740D8848A131FE /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -337,7 +366,22 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		B2C14D6A1DEE498BB341AB5E /* Copy Pods Resources */ = {
+		C459ADF845D938F273B3019A /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ASMScaleKit/Pods-ASMScaleKit-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F04A3340BEBC0C40FAFE4408 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -349,7 +393,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-Tests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ASMScaleKit/Pods-ASMScaleKit-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -527,7 +571,7 @@
 		};
 		6003F5C0195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 496FE8C828EB4EB491E5DC27 /* Pods-ASMScaleKit.xcconfig */;
+			baseConfigurationReference = 2173C292E6E522686AF7844F /* Pods-ASMScaleKit.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -544,7 +588,7 @@
 		};
 		6003F5C1195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 496FE8C828EB4EB491E5DC27 /* Pods-ASMScaleKit.xcconfig */;
+			baseConfigurationReference = CEB6B0AAD1640A5EC3D1ED8C /* Pods-ASMScaleKit.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -561,7 +605,7 @@
 		};
 		6003F5C3195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DEAB457C860F496B92391BC7 /* Pods-Tests.xcconfig */;
+			baseConfigurationReference = 1548D7281154ABBEE714CE8E /* Pods-Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ASMScaleKit.app/ASMScaleKit";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -584,7 +628,7 @@
 		};
 		6003F5C4195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DEAB457C860F496B92391BC7 /* Pods-Tests.xcconfig */;
+			baseConfigurationReference = 39EB5C21FECA98B691E9E324 /* Pods-Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ASMScaleKit.app/ASMScaleKit";
 				FRAMEWORK_SEARCH_PATHS = (
