@@ -8,11 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#if defined(__IPHONE_8_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_8_0
-#define ASKHealthKitAvailable 1
-#import <HealthKit/HealthKit.h>
-#endif
-
 /**
  *	Represents a measurement retrieved from a smart scale service provider.
  */
@@ -32,13 +27,6 @@
  *	If provided by the service provider, a unique identifier for the measurement.
  */
 @property (nonatomic, strong, readonly) NSString* uniqueId;
-
-#if ASKHealthKitAvailable
-/**
- *	The weight in the form of a Health Kit HKQuantity.
- */
-@property (nonatomic, strong, readonly) HKQuantity* weight;
-#endif
 
 /**
  *	Initialize a new ASKMeasurement.
