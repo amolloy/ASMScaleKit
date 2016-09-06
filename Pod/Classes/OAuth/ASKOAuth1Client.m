@@ -9,7 +9,6 @@
 #import "ASKOAuth1Client.h"
 #import "ASKOAuth1Token.h"
 #import <CommonCrypto/CommonHMAC.h>
-#import <libextobjc/EXTScope.h>
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
 #import "ASKOAuth1AuthenticationViewController.h"
@@ -78,28 +77,28 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 {
 	self.authorizationCompletion = completion;
 
-	@weakify(self);
+	__weak typeof(self) wself = self;
 	[self acquireOAuthRequestTokenWithPath:tokenPath
 									 scope:scope
 							  accessMethod:accessMethod
 								completion:^(ASKOAuth1Token* requestToken, NSError* error)
 	 {
-		 @strongify(self);
+		 __strong typeof(wself) sself = wself;
 		 if (!error)
 		 {
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
-			 self.presentingViewController = viewController;
-			 [self authenticateUserWithPath:authorizationPath
-							accessTokenPath:accessTokenPath
-							   requestToken:requestToken
-							   accessMethod:accessMethod];
+			 sself.presentingViewController = viewController;
+			 [sself authenticateUserWithPath:authorizationPath
+							 accessTokenPath:accessTokenPath
+								requestToken:requestToken
+								accessMethod:accessMethod];
 #else
 #error Unimplemented
 #endif
 		 }
-		 else if (self.authorizationCompletion)
+		 else if (sself.authorizationCompletion)
 		 {
-			 self.authorizationCompletion(nil, error);
+			 sself.authorizationCompletion(nil, error);
 		 }
 	 }];
 }
@@ -123,21 +122,21 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 								   resolvingAgainstBaseURL:NO];
 	}
 
-	@weakify(self);
+	__weak typeof(self) wself = self;
 	dispatch_async(dispatch_get_main_queue(), ^{
 		ASKOAuth1AuthenticationViewController* vc = [[ASKOAuth1AuthenticationViewController alloc]
 													 initWithAuthorizationURL:urlComponents.URL
 													 sentinelURL:[NSURL URLWithString:kASMOAuth1CallbackURLString]
 													 completion:^(NSURL* authorizationURL, NSError* error)
 													 {
-														 @strongify(self);
-														 [self.presentingViewController dismissViewControllerAnimated:YES
+														 __strong typeof(wself) sself = wself;
+														 [sself.presentingViewController dismissViewControllerAnimated:YES
 																										   completion:nil];
-														 [self receivedAuthorizationURL:authorizationURL
-																		accessTokenPath:accessTokenPath
-																		   requestToken:requestToken
-																		   accessMethod:accessMethod
-																				  error:error];
+														 [sself receivedAuthorizationURL:authorizationURL
+																		 accessTokenPath:accessTokenPath
+																			requestToken:requestToken
+																			accessMethod:accessMethod
+																				   error:error];
 													 }];
 		UINavigationController* nav = [[UINavigationController alloc] initWithRootViewController:vc];
 
@@ -195,16 +194,16 @@ static NSCharacterSet* oauthParameterValidCharacterSet()
 			requestToken.userInfo = mutableParameters.copy;
 		}
 
-		@weakify(self);
+		__weak typeof(self) wself = self;
 		[self acquireOAuthAccessTokenWithPath:accessTokenPath
 								 requestToken:requestToken
 								 accessMethod:accessMethod
 								   completion:^(ASKOAuth1Token* accessToken, id responseObject, NSError* aatError)
 		 {
-			 @strongify(self);
-			 if (self.authorizationCompletion)
+			 __strong typeof(wself) sself = wself;
+			 if (sself.authorizationCompletion)
 			 {
-				 self.authorizationCompletion(accessToken, aatError);
+				 sself.authorizationCompletion(accessToken, aatError);
 			 }
 		 }];
 	}

@@ -10,7 +10,6 @@
 #import "ASKOAuth1Client.h"
 #import "ASKOAuth1Token.h"
 #import "ASKWithingsUser.h"
-#import <libextobjc/EXTScope.h>
 
 @interface ASKWithingsUser ()
 - (instancetype)initWithUserId:(NSString*)userId
@@ -229,7 +228,7 @@ static NSString* const kWithingsAuthBaseURLString = @"https://oauth.withings.com
 {
 	self.authenticationCompletionHandler = completion;
 
-	@weakify(self);
+	__weak typeof(self) wself = self;
 	[self.client authorizeWithRequestTokenPath:@"account/request_token"
 						userAuthenticationPath:@"account/authorize"
 							   accessTokenPath:@"account/access_token"
@@ -238,17 +237,17 @@ static NSString* const kWithingsAuthBaseURLString = @"https://oauth.withings.com
 							fromViewController:viewController
 									completion:^(ASKOAuth1Token* accessToken, NSError *error)
 	 {
-		 @strongify(self);
+		 __strong typeof(wself) sself = wself;
 		 if (error)
 		 {
-			 if (self.authenticationCompletionHandler)
+			 if (sself.authenticationCompletionHandler)
 			 {
-				 self.authenticationCompletionHandler(nil, error);
+				 sself.authenticationCompletionHandler(nil, error);
 			 }
 		 }
 		 else
 		 {
-			 [self lookupUserInformationWithAccessToken:accessToken];
+			 [sself lookupUserInformationWithAccessToken:accessToken];
 		 }
 	 }];
 }

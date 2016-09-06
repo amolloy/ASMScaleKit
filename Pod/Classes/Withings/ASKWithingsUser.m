@@ -12,7 +12,6 @@
 #import "ASKMeasurement.h"
 #import "ASKWithingsProvider.h"
 #import "NSDictionary+ASKKeychain.h"
-#import <libextobjc/EXTScope.h>
 
 static NSString* const kWithingsUserKeychainPrefix = @"com.asmscalekit.withings.";
 
@@ -107,11 +106,11 @@ extern NSString* const ASMWithingsBaseURLString;
 	request = [serviceProvider.client requestWithOAuthParametersFromURLRequest:request
 																   accessToken:self.accessToken];
 
-	@weakify(self);
+	__weak typeof(self) wself = self;
 	NSURLSession* session = [NSURLSession sharedSession];
 	[[session dataTaskWithRequest:request
 				completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-					@strongify(self);
+					__strong typeof(wself) sself = wself;
 					NSError* outError = nil;
 					NSArray* measurements = nil;
 					if (!error)
@@ -123,8 +122,8 @@ extern NSString* const ASMWithingsBaseURLString;
 																					 options:0
 																					   error:&outError];
 
-						measurements = [self measurementsFromJSONDictionary:responseDict
-																	  error:&outError];
+						measurements = [sself measurementsFromJSONDictionary:responseDict
+																	   error:&outError];
 					}
 
 					if (completion)
