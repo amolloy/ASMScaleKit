@@ -23,7 +23,6 @@ Pod::Spec.new do |s|
 
   s.platform     = :ios, '7.0' # iOS only for now, :osx, '10.9'
   s.requires_arc = true
-  s.dependency 'libextobjc/EXTScope', '~> 0.4'
 
   s.subspec 'Core' do |cs|
     cs.source_files = 'Pod/Classes', 'Pod/Classes/OAuth'
